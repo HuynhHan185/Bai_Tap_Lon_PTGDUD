@@ -1,0 +1,195 @@
+{
+  "categories": [
+    {
+      "id": "cat-001",
+      "name": "Nồi cơm điện",
+      "slug": "noi-com-dien"
+    },
+    {
+      "id": "cat-002",
+      "name": "Nồi chiên không dầu",
+      "slug": "noi-chien-khong-dau"
+    },
+    {
+      "id": "cat-003",
+      "name": "Quạt điện",
+      "slug": "quat-dien"
+    },
+    {
+      "id": "cat-004",
+      "name": "Máy xay sinh tố",
+      "slug": "may-xay-sinh-to"
+    }
+  ],
+  "products": [
+    {
+      "id": "prod-001",
+      "slug": "noi-com-dien-sharp-ks-nr191stv",
+      "name": "Nồi cơm điện Sharp KS-NR191STV 1.8L",
+      "sku": "GD-RC-SHARP-001",
+      "brand": "Sharp",
+      "categoryId": "cat-001",
+      "categorySlug": "noi-com-dien",
+      "price": 1610000,
+      "compareAtPrice": 1690000,
+      "stock": 24,
+      "featured": true,
+      "rating": 4.8,
+      "reviewCount": 125,
+      "images": [
+        "https://via.placeholder.com/800x800?text=GD-RC-SHARP-001",
+        "https://via.placeholder.com/800x800?text=GD-RC-SHARP-001-2"
+      ],
+      "shortDescription": "Nồi cơm điện 1.8L cho gia đình 4-6 người.",
+      "description": "Thiết kế nắp gài, dễ sử dụng, phù hợp gian bếp gia đình Việt.",
+      "specs": {
+        "Dung tích": "1.8 lít",
+        "Công suất": "700W",
+        "Loại nồi": "Nắp gài"
+      },
+      "createdAt": "2026-04-26T09:00:00.000Z"
+    },
+    {
+      "id": "prod-002",
+      "slug": "noi-chien-khong-dau-philips-na130",
+      "name": "Nồi chiên không dầu Philips NA130/00 6.2L",
+      "sku": "GD-AF-PHI-001",
+      "brand": "Philips",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1490000,
+      "compareAtPrice": 1890000,
+      "stock": 16,
+      "featured": true,
+      "rating": 4.7,
+      "reviewCount": 98,
+      "images": [
+        "https://via.placeholder.com/800x800?text=GD-AF-PHI-001"
+      ],
+      "shortDescription": "Nồi chiên không dầu 6.2L, phù hợp gia đình hiện đại.",
+      "description": "Dung tích lớn, nấu nướng tiện lợi, giảm dầu mỡ.",
+      "specs": {
+        "Dung tích": "6.2 lít",
+        "Công suất": "1700W",
+        "Nhiệt độ": "80-200 độ C"
+      },
+      "createdAt": "2026-04-26T09:10:00.000Z"
+    },
+    {
+      "id": "prod-003",
+      "slug": "quat-dung-asia-vy639990",
+      "name": "Quạt đứng Asia VY639990 80W",
+      "sku": "GD-FN-ASIA-001",
+      "brand": "Asia",
+      "categoryId": "cat-003",
+      "categorySlug": "quat-dien",
+      "price": 789000,
+      "compareAtPrice": 890000,
+      "stock": 22,
+      "featured": true,
+      "rating": 4.6,
+      "reviewCount": 76,
+      "images": [
+        "https://via.placeholder.com/800x800?text=GD-FN-ASIA-001"
+      ],
+      "shortDescription": "Quạt đứng 6 cánh, công suất 80W.",
+      "description": "Quạt đứng phù hợp phòng khách, phòng ngủ và văn phòng.",
+      "specs": {
+        "Công suất": "80W",
+        "Loại quạt": "Quạt đứng",
+        "Số cánh": "6 cánh"
+      },
+      "createdAt": "2026-04-26T09:20:00.000Z"
+    }
+  ],
+  "banners": [
+    {
+      "id": "bn-001",
+      "title": "Mùa nóng sale quạt điện",
+      "image": "https://via.placeholder.com/1440x520?text=Banner+Quat",
+      "href": "/danh-muc/quat-dien"
+    }
+  ],
+  "orders": [
+    {
+      "fullName": "Đặng Trần Dương",
+      "phone": "0862349489",
+      "address": "68 Nguyễn Tư giản",
+      "paymentMethod": "momo",
+      "items": [
+        {
+          "id": "prod-002",
+          "slug": "noi-chien-khong-dau-philips-na130",
+          "name": "Nồi chiên không dầu Philips NA130/00 6.2L",
+          "sku": "GD-AF-PHI-001",
+          "brand": "Philips",
+          "categoryId": "cat-002",
+          "categorySlug": "noi-chien-khong-dau",
+          "price": 1490000,
+          "compareAtPrice": 1890000,
+          "stock": 16,
+          "featured": true,
+          "rating": 4.7,
+          "reviewCount": 98,
+          "images": [
+            "https://via.placeholder.com/800x800?text=GD-AF-PHI-001"
+          ],
+          "shortDescription": "Nồi chiên không dầu 6.2L, phù hợp gia đình hiện đại.",
+          "description": "Dung tích lớn, nấu nướng tiện lợi, giảm dầu mỡ.",
+          "specs": {
+            "Dung tích": "6.2 lít",
+            "Công suất": "1700W",
+            "Nhiệt độ": "80-200 độ C"
+          },
+          "createdAt": "2026-04-26T09:10:00.000Z",
+          "quantity": 2
+        }
+      ],
+      "subtotal": 2980000,
+      "status": "pending",
+      "createdAt": "2026-04-26T12:16:13.535Z",
+      "id": "52HQguVoSxM"
+    },
+    {
+      "fullName": "đặng trần duong",
+      "phone": "0862349489",
+      "address": "68 Nguyễn Tư Giản",
+      "paymentMethod": "bank",
+      "items": [
+        {
+          "id": "prod-002",
+          "slug": "noi-chien-khong-dau-philips-na130",
+          "name": "Nồi chiên không dầu Philips NA130/00 6.2L",
+          "sku": "GD-AF-PHI-001",
+          "brand": "Philips",
+          "categoryId": "cat-002",
+          "categorySlug": "noi-chien-khong-dau",
+          "price": 1490000,
+          "compareAtPrice": 1890000,
+          "stock": 16,
+          "featured": true,
+          "rating": 4.7,
+          "reviewCount": 98,
+          "images": [
+            "https://via.placeholder.com/800x800?text=GD-AF-PHI-001"
+          ],
+          "shortDescription": "Nồi chiên không dầu 6.2L, phù hợp gia đình hiện đại.",
+          "description": "Dung tích lớn, nấu nướng tiện lợi, giảm dầu mỡ.",
+          "specs": {
+            "Dung tích": "6.2 lít",
+            "Công suất": "1700W",
+            "Nhiệt độ": "80-200 độ C"
+          },
+          "createdAt": "2026-04-26T09:10:00.000Z",
+          "quantity": 1
+        }
+      ],
+      "subtotal": 1490000,
+      "status": "pending",
+      "createdAt": "2026-04-26T12:55:03.454Z",
+      "id": "EmvteaCUSbQ"
+    }
+  ],
+  "contactMessages": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}
