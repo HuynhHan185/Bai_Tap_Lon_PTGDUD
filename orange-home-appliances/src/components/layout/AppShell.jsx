@@ -19,7 +19,7 @@ function AppShell() {
 
           <SearchBar
             className="header-search"
-            placeholder="Tìm nồi cơm, quạt, máy xay..."
+            placeholder="Tìm nồi cơm, quạt, nồi chiên..."
           />
 
           <button

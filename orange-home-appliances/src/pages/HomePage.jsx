@@ -37,20 +37,20 @@ function HomePage() {
         </div>
 
         <div className="hero-side">
-  <Link
-    to="/danh-muc/noi-chien-khong-dau"
-    className="promo-card promo-card-air-fryer"
-  >
-    <span>Sale nồi chiên không dầu</span>
-  </Link>
+          <Link
+            to="/danh-muc/noi-chien-khong-dau"
+            className="promo-card promo-card-air-fryer"
+          >
+            <span>Sale nồi chiên không dầu</span>
+          </Link>
 
-  <Link
-    to="/danh-muc/quat-dien"
-    className="promo-card promo-card-fan"
-  >
-    <span>Quạt điện cho mùa nóng</span>
-  </Link>
-</div>
+          <Link
+            to="/danh-muc/quat-dien"
+            className="promo-card promo-card-fan"
+          >
+            <span>Quạt điện cho mùa nóng</span>
+          </Link>
+        </div>
       </div>
 
       <div className="category-strip">
