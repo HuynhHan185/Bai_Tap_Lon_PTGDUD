@@ -10,8 +10,10 @@
     "mock": "json-server mock/db.json --port 3001"
   },
   "dependencies": {
+    "@ant-design/icons": "^6.2.2",
     "@hookform/resolvers": "^5.2.2",
     "@reduxjs/toolkit": "^2.11.2",
+    "antd": "^6.3.7",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-helmet-async": "^3.0.0",

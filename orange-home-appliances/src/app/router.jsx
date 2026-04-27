@@ -2,6 +2,7 @@ import { lazy } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 
 import AppShell from '../components/layout/AppShell'
+import ProtectedRoute from '../components/layout/ProtectedRoute'
 
 const HomePage = lazy(() => import('../pages/HomePage'))
 const CategoryPage = lazy(() => import('../pages/CategoryPage'))
@@ -42,7 +43,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'thanh-toan',
-        element: <CheckoutPage />,
+        element: (
+          <ProtectedRoute>
+            <CheckoutPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'gioi-thieu',
@@ -54,7 +59,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'tai-khoan',
-        element: <AccountDashboardPage />,
+        element: (
+          <ProtectedRoute>
+            <AccountDashboardPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'tai-khoan/dang-nhap',

@@ -14,3 +14,11 @@ export function loadState(key, fallbackValue) {
       // Bỏ qua nếu trình duyệt không cho lưu localStorage
     }
   }
+
+  export function removeState(key) {
+    try {
+      localStorage.removeItem(key)
+    } catch {
+      // Bỏ qua
+    }
+  }

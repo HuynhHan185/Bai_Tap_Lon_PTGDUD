@@ -9,6 +9,7 @@ import {
   selectCartItems,
   selectCartSubtotal,
 } from '../features/cart/cartSlice'
+import { selectUser } from '../features/user/userSlice'
 import { createOrder } from '../services/api'
 
 const schema = z.object({
@@ -25,6 +26,8 @@ function CheckoutPage() {
   const subtotal = useSelector(selectCartSubtotal)
   const dispatch = useDispatch()
 
+  const user = useSelector(selectUser)
+
   const {
     register,
     handleSubmit,
@@ -33,12 +36,15 @@ function CheckoutPage() {
     resolver: zodResolver(schema),
     defaultValues: {
       paymentMethod: 'cod',
+      fullName: user?.fullName || '',
+      email: user?.email || ''
     },
   })
 
   async function onSubmit(values) {
     await createOrder({
       ...values,
+      userId: user?.id,
       items,
       subtotal,
       status: 'pending',

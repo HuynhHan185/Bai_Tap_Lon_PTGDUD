@@ -186,5 +186,21 @@
     }
   ],
   "contactMessages": [],
+  "users": [
+    {
+      "id": "usr-admin",
+      "email": "admin@camvang.com",
+      "password": "admin",
+      "fullName": "Administrator",
+      "role": "admin"
+    },
+    {
+      "id": "usr-001",
+      "email": "duong@example.com",
+      "password": "123",
+      "fullName": "Đặng Trần Dương",
+      "role": "customer"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

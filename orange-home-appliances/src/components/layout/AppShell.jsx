@@ -1,13 +1,25 @@
-import { Link, NavLink, Outlet } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import { useState } from 'react'
 
 import SearchBar from '../common/SearchBar'
 import { selectCartCount } from '../../features/cart/cartSlice'
+import { selectUser, selectIsAuthenticated, logout } from '../../features/user/userSlice'
 
 function AppShell() {
   const cartCount = useSelector(selectCartCount)
+  const user = useSelector(selectUser)
+  const isAuthenticated = useSelector(selectIsAuthenticated)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  
   const [open, setOpen] = useState(false)
+
+  const handleLogout = (e) => {
+    e.preventDefault()
+    dispatch(logout())
+    navigate('/tai-khoan/dang-nhap')
+  }
 
   return (
     <>
@@ -35,8 +47,16 @@ function AppShell() {
             <NavLink to="/danh-muc/noi-chien-khong-dau">Nồi chiên</NavLink>
             <NavLink to="/danh-muc/quat-dien">Quạt</NavLink>
             <NavLink to="/gioi-thieu">Giới thiệu</NavLink>
-            <NavLink to="/lien-he">Liên hệ</NavLink>
-            <NavLink to="/tai-khoan/dang-nhap">Tài khoản</NavLink>
+            
+            {isAuthenticated ? (
+              <>
+                <NavLink to="/tai-khoan">Chào, {user?.fullName || user?.username}</NavLink>
+                <a href="#" onClick={handleLogout} style={{ color: '#d70018' }}>Đăng xuất</a>
+              </>
+            ) : (
+              <NavLink to="/tai-khoan/dang-nhap">Đăng nhập</NavLink>
+            )}
+
             <NavLink to="/gio-hang" className="cart-link">
               Giỏ hàng ({cartCount})
             </NavLink>
