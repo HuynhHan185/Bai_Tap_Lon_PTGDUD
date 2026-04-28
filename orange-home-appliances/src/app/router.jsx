@@ -3,6 +3,8 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import AppShell from '../components/layout/AppShell'
 import ProtectedRoute from '../components/layout/ProtectedRoute'
+import AdminShell from '../components/layout/AdminShell'
+import AdminRoute from '../components/layout/AdminRoute'
 
 const HomePage = lazy(() => import('../pages/HomePage'))
 const CategoryPage = lazy(() => import('../pages/CategoryPage'))
@@ -15,6 +17,13 @@ const AuthPage = lazy(() => import('../pages/account/AuthPage'))
 const AccountDashboardPage = lazy(() =>
   import('../pages/account/AccountDashboardPage'),
 )
+
+// Admin pages
+const AdminDashboardPage = lazy(() => import('../pages/admin/AdminDashboardPage'))
+const AdminProductPage = lazy(() => import('../pages/admin/AdminProductPage'))
+const AdminCategoryPage = lazy(() => import('../pages/admin/AdminCategoryPage'))
+const AdminOrderPage = lazy(() => import('../pages/admin/AdminOrderPage'))
+const AdminUserPage = lazy(() => import('../pages/admin/AdminUserPage'))
 
 export const router = createBrowserRouter([
   {
@@ -76,6 +85,36 @@ export const router = createBrowserRouter([
       {
         path: 'tai-khoan/quen-mat-khau',
         element: <AuthPage mode="forgot" />,
+      },
+    ],
+  },
+  {
+    path: '/admin',
+    element: (
+      <AdminRoute>
+        <AdminShell />
+      </AdminRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <AdminDashboardPage />,
+      },
+      {
+        path: 'products',
+        element: <AdminProductPage />,
+      },
+      {
+        path: 'categories',
+        element: <AdminCategoryPage />,
+      },
+      {
+        path: 'orders',
+        element: <AdminOrderPage />,
+      },
+      {
+        path: 'users',
+        element: <AdminUserPage />,
       },
     ],
   },
