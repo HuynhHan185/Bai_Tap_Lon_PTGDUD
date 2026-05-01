@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
+const API_URL = import.meta.env.VITE_API_URL || '/api'
 
 // Helper: get token from localStorage
 function getToken() {
@@ -121,6 +121,12 @@ export async function getFeaturedProducts() {
 export async function getRelatedProducts(productId) {
   const data = await fetchApi(`/products/related/${productId}`)
   return data.products
+}
+
+export async function getBrands(categorySlug) {
+  const params = categorySlug ? `?category=${categorySlug}` : ''
+  const data = await fetchApi(`/products/brands${params}`)
+  return data.brands
 }
 
 // ==================== CATEGORIES ====================

@@ -12,20 +12,31 @@ const saveCart = (state) => {
   localStorage.setItem('orange_cart', JSON.stringify(state))
 }
 
+// Normalize product item to always have id, name, price, image
+function normalizeItem(item) {
+  return {
+    ...item,
+    id: item.ma_sp || item.id,
+    name: item.ten_sp || item.name,
+    price: item.don_gia || item.price,
+    image: item.hinh_anh || item.image || null,
+  }
+}
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState: loadCart(),
   reducers: {
     addToCart(state, action) {
-      const item = action.payload
-      const existed = state.items.find((x) => x.id === item.id)
+      const raw = normalizeItem(action.payload)
+      const existed = state.items.find((x) => x.id === raw.id)
 
       if (existed) {
-        existed.quantity += item.quantity || 1
+        existed.quantity += raw.quantity || 1
       } else {
         state.items.push({
-          ...item,
-          quantity: item.quantity || 1,
+          ...raw,
+          quantity: raw.quantity || 1,
         })
       }
 
@@ -65,7 +76,7 @@ export const selectCartCount = (state) =>
 
 export const selectCartSubtotal = (state) =>
   state.cart.items.reduce(
-    (sum, item) => sum + item.quantity * item.price,
+    (sum, item) => sum + item.quantity * (item.price || 0),
     0,
   )
 

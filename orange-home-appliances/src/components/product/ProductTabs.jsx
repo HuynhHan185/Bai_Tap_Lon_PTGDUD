@@ -3,6 +3,14 @@ import { useState } from 'react'
 function ProductTabs({ product }) {
   const [activeTab, setActiveTab] = useState('description')
 
+  const thongSo = (() => {
+    if (!product.thong_so) return {}
+    if (typeof product.thong_so === 'string') {
+      try { return JSON.parse(product.thong_so) } catch { return {} }
+    }
+    return product.thong_so
+  })()
+
   return (
     <section className="product-tabs">
       <div className="tab-buttons">
@@ -34,7 +42,7 @@ function ProductTabs({ product }) {
       {activeTab === 'description' && (
         <div className="tab-panel">
           <h2>Mô tả sản phẩm</h2>
-          <p>{product.description}</p>
+          <p>{product.mo_ta || product.mo_ta_ngan || 'Chưa có mô tả.'}</p>
         </div>
       )}
 
@@ -42,16 +50,20 @@ function ProductTabs({ product }) {
         <div className="tab-panel">
           <h2>Thông số kỹ thuật</h2>
 
-          <table className="spec-table">
-            <tbody>
-              {Object.entries(product.specs || {}).map(([key, value]) => (
-                <tr key={key}>
-                  <th>{key}</th>
-                  <td>{value}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {Object.keys(thongSo).length > 0 ? (
+            <table className="spec-table">
+              <tbody>
+                {Object.entries(thongSo).map(([key, value]) => (
+                  <tr key={key}>
+                    <th>{key}</th>
+                    <td>{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>Chưa có thông số kỹ thuật.</p>
+          )}
         </div>
       )}
 
@@ -59,7 +71,7 @@ function ProductTabs({ product }) {
         <div className="tab-panel">
           <h2>Đánh giá</h2>
           <p>
-            {product.rating || 5}/5 từ {product.reviewCount || 0} lượt đánh giá.
+            {product.rating || 5}/5 sao.
           </p>
           <p>Chức năng đánh giá chi tiết có thể nối backend thật sau.</p>
         </div>

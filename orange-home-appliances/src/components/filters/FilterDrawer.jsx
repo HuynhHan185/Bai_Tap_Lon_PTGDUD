@@ -1,14 +1,35 @@
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-const brands = ['Sharp', 'Philips', 'Panasonic', 'Sunhouse', 'Asia', 'Xiaomi', 'Deerma', 'Kangaroo']
+import { getBrands } from '../../services/api'
 
-function FilterDrawer({ categories = [], currentCategory = '', isOpen = true, onClose }) {
+const PRICE_RANGES = [
+  { value: 'under_500k', label: 'Dưới 500.000 đ', min: 0, max: 500000 },
+  { value: '500k_1m', label: '500.000 đ - 1.000.000 đ', min: 500000, max: 1000000 },
+  { value: '1m_2m', label: '1.000.000 đ - 2.000.000 đ', min: 1000000, max: 2000000 },
+  { value: 'above_2m', label: 'Trên 2.000.000 đ', min: 2000000, max: 0 },
+]
+
+function FilterDrawer({ categories = [], currentCategory = {}, isOpen = true, onClose }) {
   const [searchParams, setSearchParams] = useSearchParams()
+  const [brands, setBrands] = useState([])
+  const [searchText, setSearchText] = useState('')
+
+  useEffect(() => {
+    if (currentCategory?.ma_loai) {
+      getBrands(currentCategory.ma_loai)
+        .then(setBrands)
+        .catch(() => setBrands([]))
+    } else {
+      getBrands()
+        .then(setBrands)
+        .catch(() => setBrands([]))
+    }
+  }, [currentCategory])
 
   const selectedBrand = searchParams.get('brand') || ''
-  const selectedStock = searchParams.get('stock') || ''
-  const minPrice = searchParams.get('minPrice') || ''
-  const maxPrice = searchParams.get('maxPrice') || ''
+  const selectedStock = searchParams.get('stock') === '1' ? true : false
+  const selectedPriceRange = searchParams.get('priceRange') || ''
 
   function updateParam(key, value) {
     const nextParams = new URLSearchParams(searchParams)
@@ -23,17 +44,33 @@ function FilterDrawer({ categories = [], currentCategory = '', isOpen = true, on
     setSearchParams(nextParams)
   }
 
-  function clearFilters() {
-    const q = searchParams.get('q')
-    const sort = searchParams.get('sort')
+  function handleSearch(e) {
+    e.preventDefault()
+    updateParam('q', searchText)
+  }
 
+  function togglePriceRange(value) {
+    if (selectedPriceRange === value) {
+      updateParam('priceRange', '')
+    } else {
+      updateParam('priceRange', value)
+    }
+  }
+
+  function toggleStock() {
+    updateParam('stock', selectedStock ? '' : '1')
+  }
+
+  function clearFilters() {
+    const sort = searchParams.get('sort')
     const nextParams = new URLSearchParams()
 
-    if (q) nextParams.set('q', q)
     if (sort) nextParams.set('sort', sort)
-
     setSearchParams(nextParams)
+    setSearchText('')
   }
+
+  const hasActiveFilters = selectedBrand || selectedStock || selectedPriceRange || searchParams.get('q')
 
   return (
     <aside className={`filter-drawer ${isOpen ? 'is-open' : ''}`}>
@@ -48,8 +85,34 @@ function FilterDrawer({ categories = [], currentCategory = '', isOpen = true, on
       </div>
 
       <div className="filter-group">
-        <h4>Danh mục hiện tại</h4>
-        <p>{currentCategory || 'Tất cả sản phẩm'}</p>
+        <h4>Tìm kiếm</h4>
+        <form onSubmit={handleSearch} className="filter-search-form">
+          <input
+            type="text"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            placeholder="Tìm kiếm sản phẩm..."
+          />
+          <button type="submit" className="btn-primary">
+            Tìm
+          </button>
+        </form>
+      </div>
+
+      <div className="filter-group">
+        <h4>Khoảng giá</h4>
+        <div className="filter-price-grid">
+          {PRICE_RANGES.map((range) => (
+            <button
+              key={range.value}
+              type="button"
+              className={`filter-price-btn ${selectedPriceRange === range.value ? 'active' : ''}`}
+              onClick={() => togglePriceRange(range.value)}
+            >
+              {range.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="filter-group">
@@ -69,53 +132,33 @@ function FilterDrawer({ categories = [], currentCategory = '', isOpen = true, on
       </div>
 
       <div className="filter-group">
-        <h4>Kho hàng</h4>
-
         <label className="checkbox-line">
           <input
             type="checkbox"
-            checked={selectedStock === 'in-stock'}
-            onChange={(event) =>
-              updateParam('stock', event.target.checked ? 'in-stock' : '')
-            }
+            checked={selectedStock}
+            onChange={toggleStock}
           />
           Chỉ hiện sản phẩm còn hàng
         </label>
       </div>
 
-      <div className="filter-group">
-        <h4>Khoảng giá</h4>
-
-        <input
-          type="number"
-          value={minPrice}
-          placeholder="Giá từ"
-          onChange={(event) => updateParam('minPrice', event.target.value)}
-        />
-
-        <input
-          type="number"
-          value={maxPrice}
-          placeholder="Giá đến"
-          onChange={(event) => updateParam('maxPrice', event.target.value)}
-        />
-      </div>
+      {hasActiveFilters && (
+        <button type="button" className="btn-secondary" onClick={clearFilters}>
+          Bỏ chọn
+        </button>
+      )}
 
       <div className="filter-group">
         <h4>Danh mục khác</h4>
 
         <div className="filter-category-list">
           {categories.map((category) => (
-            <a key={category.id} href={`/danh-muc/${category.slug}`}>
-              {category.name}
+            <a key={category.ma_loai} href={`/danh-muc/${category.slug}`}>
+              {category.ten_loai}
             </a>
           ))}
         </div>
       </div>
-
-      <button type="button" className="btn-secondary" onClick={clearFilters}>
-        Xóa bộ lọc
-      </button>
     </aside>
   )
 }

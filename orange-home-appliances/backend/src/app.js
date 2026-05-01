@@ -19,7 +19,7 @@ app.use(cors({
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
+  max: 1000,
   message: { success: false, message: 'Quá nhiều yêu cầu, vui lòng thử lại sau' },
 });
 app.use('/api', limiter);
@@ -27,6 +27,16 @@ app.use('/api', limiter);
 // Body parser
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Ensure UTF-8 charset for all API JSON responses
+app.use('/api', (req, res, next) => {
+  const originalJson = res.json.bind(res);
+  res.json = (body) => {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    return originalJson(body);
+  };
+  next();
+});
 
 // Static files (uploaded images)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));

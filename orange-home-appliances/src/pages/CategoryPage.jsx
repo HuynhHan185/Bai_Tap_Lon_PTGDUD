@@ -24,8 +24,7 @@ function CategoryPage() {
   const sort = searchParams.get('sort') || '-createdAt'
   const brand = searchParams.get('brand') || ''
   const stock = searchParams.get('stock') || ''
-  const minPrice = Number(searchParams.get('minPrice') || 0)
-  const maxPrice = Number(searchParams.get('maxPrice') || 0)
+  const priceRange = searchParams.get('priceRange') || ''
   const page = Number(searchParams.get('page') || 1)
 
   useEffect(() => {
@@ -34,71 +33,73 @@ function CategoryPage() {
         setLoading(true)
 
         const [productList, categoryList] = await Promise.all([
-          getProducts(),
+          getProducts({ category: slug || undefined }),
           getCategories(),
         ])
 
-        setProducts(productList.data || productList)
+        setProducts(productList.products || [])
         setCategories(categoryList)
+      } catch (err) {
+        console.error('Error loading data:', err)
+        setProducts([])
       } finally {
         setLoading(false)
       }
     }
 
     fetchData()
-  }, [])
+  }, [slug])
 
   const currentCategory = categories.find((category) => category.slug === slug)
 
   const filteredProducts = useMemo(() => {
     let result = [...products]
 
-    if (slug) {
-      result = result.filter((product) => product.categorySlug === slug)
-    }
-
     if (q) {
       result = result.filter((product) =>
-        product.name.toLowerCase().includes(q.toLowerCase()),
+        product.ten_sp?.toLowerCase().includes(q.toLowerCase()),
       )
     }
 
     if (brand) {
       result = result.filter((product) =>
-        product.brand.toLowerCase().includes(brand.toLowerCase()),
+        product.brand?.toLowerCase().includes(brand.toLowerCase()),
       )
     }
 
     if (stock === 'in-stock') {
-      result = result.filter((product) => product.stock > 0)
+      result = result.filter((product) => product.so_luong_ton > 0)
     }
 
-    if (minPrice > 0) {
-      result = result.filter((product) => product.price >= minPrice)
-    }
-
-    if (maxPrice > 0) {
-      result = result.filter((product) => product.price <= maxPrice)
+    if (priceRange) {
+      const rangeMap = {
+        under_500k: [0, 500000],
+        '500k_1m': [500000, 1000000],
+        '1m_2m': [1000000, 2000000],
+        above_2m: [2000000, Infinity],
+      }
+      const [min, max] = rangeMap[priceRange] || [0, Infinity]
+      result = result.filter((product) => product.don_gia >= min && product.don_gia < max)
     }
 
     if (sort === 'price') {
-      result.sort((a, b) => a.price - b.price)
+      result.sort((a, b) => a.don_gia - b.don_gia)
     }
 
     if (sort === '-price') {
-      result.sort((a, b) => b.price - a.price)
+      result.sort((a, b) => b.don_gia - a.don_gia)
     }
 
     if (sort === 'name') {
-      result.sort((a, b) => a.name.localeCompare(b.name))
+      result.sort((a, b) => (a.ten_sp || '').localeCompare(b.ten_sp || ''))
     }
 
-    if (sort === '-createdAt') {
-      result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    if (sort === '-createdAt' || sort === 'created_desc') {
+      result.sort((a, b) => new Date(b.ngay_tao || 0) - new Date(a.ngay_tao || 0))
     }
 
     return result
-  }, [products, slug, q, brand, stock, minPrice, maxPrice, sort])
+  }, [products, q, brand, stock, priceRange, sort])
 
   const totalPages = Math.ceil(filteredProducts.length / PAGE_SIZE) || 1
 
@@ -117,27 +118,27 @@ function CategoryPage() {
     <section className="container category-page">
       <Helmet>
         <title>
-          {currentCategory?.name || q ? 'Tìm kiếm sản phẩm' : 'Danh mục sản phẩm'} | CamVang Home
+          {currentCategory?.ten_loai || q ? 'Tìm kiếm sản phẩm' : 'Danh mục sản phẩm'} | CamVang Home
         </title>
       </Helmet>
 
       <Breadcrumbs
         items={[
           {
-            label: currentCategory?.name || 'Sản phẩm',
+            label: currentCategory?.ten_loai || 'Sản phẩm',
           },
         ]}
       />
 
       <div className="category-title">
-        <h1>{currentCategory?.name || 'Tất cả sản phẩm'}</h1>
+        <h1>{currentCategory?.ten_loai || 'Tất cả sản phẩm'}</h1>
         {q && <p>Kết quả tìm kiếm cho: "{q}"</p>}
       </div>
 
       <div className="category-layout">
         <FilterDrawer
           categories={categories}
-          currentCategory={currentCategory?.name}
+          currentCategory={currentCategory}
           isOpen={filterOpen}
           onClose={() => setFilterOpen(false)}
         />
@@ -154,7 +155,7 @@ function CategoryPage() {
             <>
               <div className="product-grid">
                 {paginatedProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard key={product.ma_sp} product={product} />
                 ))}
               </div>
 

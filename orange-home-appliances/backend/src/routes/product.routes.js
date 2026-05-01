@@ -6,7 +6,7 @@ const validate = require('../middleware/validate');
 const upload = require('../middleware/upload');
 const { body } = require('express-validator');
 const {
-  getAll, getFeatured, getRelated, getBySlug,
+  getAll, getFeatured, getRelated, getBySlug, getBrands,
   getAllAdmin, create, update, remove, uploadImage,
 } = require('../controllers/product.controller');
 
@@ -24,6 +24,7 @@ router.get('/', getAll);
 router.get('/featured', getFeatured);
 router.get('/related/:id', getRelated);
 router.get('/slug/:slug', getBySlug);
+router.get('/brands', getBrands);
 
 // Admin
 router.get('/admin/all', auth, adminOnly, getAllAdmin);

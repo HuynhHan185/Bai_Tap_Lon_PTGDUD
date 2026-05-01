@@ -129,6 +129,25 @@ const getRelated = asyncHandler(async (req, res) => {
   res.json({ success: true, products });
 });
 
+// GET /api/products/brands
+const getBrands = asyncHandler(async (req, res) => {
+  const { category } = req.query;
+  let sql = `SELECT DISTINCT brand FROM products
+     WHERE brand IS NOT NULL AND brand != '' AND is_deleted = 0`;
+  const params = [];
+
+  if (category) {
+    sql += ` AND ma_loai = ?`;
+    params.push(category);
+  }
+
+  sql += ` ORDER BY brand ASC`;
+
+  const [rows] = await pool.query(sql, params);
+  const brands = rows.map((r) => r.brand).filter(Boolean);
+  res.json({ success: true, brands });
+});
+
 // GET /api/products/slug/:slug
 const getBySlug = asyncHandler(async (req, res) => {
   const [rows] = await pool.query(
@@ -281,6 +300,7 @@ module.exports = {
   getFeatured,
   getRelated,
   getBySlug,
+  getBrands,
   getAllAdmin,
   create,
   update,

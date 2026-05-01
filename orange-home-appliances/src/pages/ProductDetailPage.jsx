@@ -8,7 +8,7 @@ import ProductCard from '../components/product/ProductCard'
 import ProductGallery from '../components/product/ProductGallery'
 import ProductTabs from '../components/product/ProductTabs'
 import { addToCart } from '../features/cart/cartSlice'
-import { getProductBySlug, getProducts } from '../services/api'
+import { getProductBySlug, getRelatedProducts } from '../services/api'
 import { formatCurrency } from '../utils/currency'
 
 function ProductDetailPage() {
@@ -22,19 +22,16 @@ function ProductDetailPage() {
 
   useEffect(() => {
     async function fetchProduct() {
-      const data = await getProductBySlug(slug)
-      setProduct(data)
+      try {
+        const data = await getProductBySlug(slug)
+        setProduct(data)
 
-      if (data?.categorySlug) {
-        const relatedData = await getProducts({
-          categorySlug: data.categorySlug,
-        })
-
-        setRelated(
-          (relatedData.data || relatedData)
-            .filter((item) => item.slug !== data.slug)
-            .slice(0, 4),
-        )
+        if (data?.ma_sp) {
+          const relatedData = await getRelatedProducts(data.ma_sp)
+          setRelated((relatedData.products || []).filter((item) => item.slug !== slug).slice(0, 4))
+        }
+      } catch (err) {
+        console.error('Error loading product:', err)
       }
     }
 
@@ -42,7 +39,7 @@ function ProductDetailPage() {
   }, [slug])
 
   if (!product) {
-    return <section className="container">Đang tải sản phẩm...</section>
+    return <section className="container"><p>Đang tải sản phẩm...</p></section>
   }
 
   function handleAddToCart() {
@@ -57,14 +54,14 @@ function ProductDetailPage() {
   return (
     <section className="container detail-page">
       <Helmet>
-        <title>{product.name} | CamVang Home</title>
-        <meta name="description" content={product.shortDescription} />
+        <title>{product.ten_sp} | CamVang Home</title>
+        <meta name="description" content={product.mo_ta_ngan} />
       </Helmet>
 
       <Breadcrumbs
         items={[
           { label: 'Sản phẩm', to: '/tim-kiem' },
-          { label: product.name },
+          { label: product.ten_sp },
         ]}
       />
 
@@ -73,20 +70,20 @@ function ProductDetailPage() {
 
         <div className="summary">
           <p className="product-brand">{product.brand}</p>
-          <h1>{product.name}</h1>
+          <h1>{product.ten_sp}</h1>
 
           <p className="product-meta">
-            SKU: {product.sku} · Còn {product.stock} sản phẩm · {product.rating}/5 sao
+            SKU: {product.sku} · Còn {product.so_luong_ton} sản phẩm
           </p>
 
           <div className="price-large">
-            <strong>{formatCurrency(product.price)}</strong>
-            {product.compareAtPrice && (
-              <span>{formatCurrency(product.compareAtPrice)}</span>
+            <strong>{formatCurrency(product.don_gia)}</strong>
+            {product.gia_goc && product.gia_goc > product.don_gia && (
+              <span>{formatCurrency(product.gia_goc)}</span>
             )}
           </div>
 
-          <p>{product.shortDescription}</p>
+          <p>{product.mo_ta_ngan}</p>
 
           <div className="qty-row">
             <button type="button" onClick={() => setQty((value) => Math.max(1, value - 1))}>
@@ -117,7 +114,7 @@ function ProductDetailPage() {
 
         <div className="product-grid">
           {related.map((item) => (
-            <ProductCard key={item.id} product={item} />
+            <ProductCard key={item.ma_sp} product={item} />
           ))}
         </div>
       </section>

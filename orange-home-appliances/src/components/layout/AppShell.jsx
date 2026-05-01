@@ -1,10 +1,11 @@
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 import SearchBar from '../common/SearchBar'
 import { selectCartCount } from '../../features/cart/cartSlice'
 import { selectUser, selectIsAuthenticated, logout } from '../../features/user/userSlice'
+import { getCategories } from '../../services/api'
 
 function AppShell() {
   const cartCount = useSelector(selectCartCount)
@@ -12,8 +13,25 @@ function AppShell() {
   const isAuthenticated = useSelector(selectIsAuthenticated)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  
+
   const [open, setOpen] = useState(false)
+  const [categories, setCategories] = useState([])
+  const [productsOpen, setProductsOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    getCategories().then(setCategories).catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setProductsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const handleLogout = (e) => {
     e.preventDefault()
@@ -43,11 +61,39 @@ function AppShell() {
           </button>
 
           <nav className={`main-nav ${open ? 'is-open' : ''}`}>
-            <NavLink to="/danh-muc/noi-com-dien">Nồi cơm</NavLink>
-            <NavLink to="/danh-muc/noi-chien-khong-dau">Nồi chiên</NavLink>
-            <NavLink to="/danh-muc/quat-dien">Quạt</NavLink>
+            {/* Dropdown Sản phẩm */}
+            <div className="nav-dropdown" ref={dropdownRef}>
+              <button
+                type="button"
+                className={`nav-dropdown-toggle ${productsOpen ? 'is-open' : ''}`}
+                onClick={() => setProductsOpen((v) => !v)}
+                aria-expanded={productsOpen}
+              >
+                Sản phẩm
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ marginLeft: 4 }}>
+                  <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+              {productsOpen && (
+                <div className="nav-dropdown-panel">
+                  <div className="nav-dropdown-grid">
+                    {categories.map((cat) => (
+                      <Link
+                        key={cat.ma_loai}
+                        to={`/danh-muc/${cat.slug}`}
+                        className="nav-dropdown-item"
+                        onClick={() => setProductsOpen(false)}
+                      >
+                        {cat.ten_loai}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <NavLink to="/gioi-thieu">Giới thiệu</NavLink>
-            
+
             {isAuthenticated ? (
               <>
                 <NavLink to="/tai-khoan">Chào, {user?.fullName || user?.username}</NavLink>
