@@ -19,59 +19,682 @@
   "products": [
     {
       "id": "prod-001",
-      "slug": "noi-com-dien-sharp-ks-nr191stv",
-      "name": "Nồi cơm điện Sharp KS-NR191STV 1.8L",
-      "sku": "GD-RC-SHARP-001",
-      "brand": "Sharp",
+      "slug": "noi-com-dien-philips-hd4515",
+      "name": "Nồi cơm điện Philips HD4515 1.8L",
+      "sku": "GD-RC-PHI-001",
+      "brand": "Philips",
       "categoryId": "cat-001",
       "categorySlug": "noi-com-dien",
-      "price": 1610000,
-      "compareAtPrice": 1690000,
-      "stock": 24,
+      "price": 1890000,
+      "compareAtPrice": 2190000,
+      "stock": 20,
       "featured": true,
-      "rating": 4.8,
-      "reviewCount": 125,
+      "rating": 4.7,
+      "reviewCount": 98,
       "images": [
-        "https://via.placeholder.com/800x800?text=GD-RC-SHARP-001",
-        "https://via.placeholder.com/800x800?text=GD-RC-SHARP-001-2"
+        "/Noicom/noi-com-dien-philips-hd4515.png"
       ],
-      "shortDescription": "Nồi cơm điện 1.8L cho gia đình 4-6 người.",
-      "description": "Thiết kế nắp gài, dễ sử dụng, phù hợp gian bếp gia đình Việt.",
+      "shortDescription": "Nồi cơm điện Philips cao cấp, nấu cơm ngon.",
+      "description": "Công nghệ nấu hiện đại giúp cơm chín đều, giữ nhiệt tốt.",
+      "specs": {
+        "Dung tích": "1.8 lít",
+        "Công suất": "860W",
+        "Loại nồi": "Điện tử"
+      },
+      "createdAt": "2026-04-26T09:10:00.000Z"
+    },
+    {
+      "id": "prod-002",
+      "slug": "noi-com-dien-panasonic-sr-dr18",
+      "name": "Nồi cơm điện Panasonic SR-DR18 1.8L",
+      "sku": "GD-RC-PAN-001",
+      "brand": "Panasonic",
+      "categoryId": "cat-001",
+      "categorySlug": "noi-com-dien",
+      "price": 1750000,
+      "compareAtPrice": 1990000,
+      "stock": 22,
+      "featured": false,
+      "rating": 4.7,
+      "reviewCount": 110,
+      "images": [
+        "/Noicom/noi-com-dien-panasonic-sr-dr18.png"
+      ],
+      "shortDescription": "Nồi cơm điện Panasonic bền bỉ, chất lượng Nhật.",
+      "description": "Giữ ấm lâu, nấu cơm thơm ngon cho gia đình.",
+      "specs": {
+        "Dung tích": "1.8 lít",
+        "Công suất": "750W",
+        "Loại nồi": "Nắp gài"
+      },
+      "createdAt": "2026-04-26T09:20:00.000Z"
+    },
+    {
+      "id": "prod-003",
+      "slug": "noi-com-dien-sunhouse-shd8201",
+      "name": "Nồi cơm điện Sunhouse SHD8201 1.8L",
+      "sku": "GD-RC-SUN-001",
+      "brand": "Sunhouse",
+      "categoryId": "cat-001",
+      "categorySlug": "noi-com-dien",
+      "price": 950000,
+      "compareAtPrice": 1200000,
+      "stock": 30,
+      "featured": false,
+      "rating": 4.4,
+      "reviewCount": 70,
+      "images": [
+        "/Noicom/noi-com-dien-sunhouse-shd8201.png"
+      ],
+      "shortDescription": "Nồi cơm điện giá rẻ, phù hợp gia đình.",
+      "description": "Thiết kế đơn giản, dễ sử dụng.",
       "specs": {
         "Dung tích": "1.8 lít",
         "Công suất": "700W",
         "Loại nồi": "Nắp gài"
       },
-      "createdAt": "2026-04-26T09:00:00.000Z"
+      "createdAt": "2026-04-26T09:30:00.000Z"
     },
     {
-      "id": "prod-002",
-      "slug": "noi-chien-khong-dau-philips-na130",
-      "name": "Nồi chiên không dầu Philips NA130/00 6.2L",
-      "sku": "GD-AF-PHI-001",
+      "id": "prod-004",
+      "slug": "noi-com-dien-kangaroo-kg18",
+      "name": "Nồi cơm điện Kangaroo KG18 1.8L",
+      "sku": "GD-RC-KAN-001",
+      "brand": "Kangaroo",
+      "categoryId": "cat-001",
+      "categorySlug": "noi-com-dien",
+      "price": 990000,
+      "compareAtPrice": 1150000,
+      "stock": 25,
+      "featured": false,
+      "rating": 4.3,
+      "reviewCount": 60,
+      "images": [
+        "/Noicom/noi-com-dien-kangaroo-kg18.png"
+      ],
+      "shortDescription": "Nồi cơm điện phổ thông, giá tốt.",
+      "description": "Phù hợp sinh viên và gia đình nhỏ.",
+      "specs": {
+        "Dung tích": "1.8 lít",
+        "Công suất": "700W",
+        "Loại nồi": "Nắp gài"
+      },
+      "createdAt": "2026-04-26T09:40:00.000Z"
+    },
+    {
+      "id": "prod-005",
+      "slug": "noi-com-dien-xiaomi-mi-ih",
+      "name": "Nồi cơm điện Xiaomi Mi IH 3L",
+      "sku": "GD-RC-XIA-001",
+      "brand": "Xiaomi",
+      "categoryId": "cat-001",
+      "categorySlug": "noi-com-dien",
+      "price": 2890000,
+      "compareAtPrice": 3200000,
+      "stock": 12,
+      "featured": false,
+      "rating": 4.8,
+      "reviewCount": 150,
+      "images": [
+        "/Noicom/noi-com-dien-xiaomi-mi-ih.png"
+      ],
+      "shortDescription": "Nồi cơm điện cao tần thông minh.",
+      "description": "Điều khiển qua app, nấu cơm cực ngon.",
+      "specs": {
+        "Dung tích": "3 lít",
+        "Công suất": "1100W",
+        "Loại nồi": "Cao tần IH"
+      },
+      "createdAt": "2026-04-26T09:50:00.000Z"
+    },
+    {
+      "id": "prod-006",
+      "slug": "noi-com-dien-sharp-ks-com18v",
+      "name": "Nồi cơm điện Sharp KS-COM18V 1.8L",
+      "sku": "GD-RC-SHARP-002",
+      "brand": "Sharp",
+      "categoryId": "cat-001",
+      "categorySlug": "noi-com-dien",
+      "price": 1490000,
+      "compareAtPrice": 1690000,
+      "stock": 20,
+      "featured": true,
+      "rating": 4.7,
+      "reviewCount": 85,
+      "images": [
+        "/Noicom/noi-com-dien-sharp-ks-com18v.png"
+      ],
+      "shortDescription": "Nồi cơm điện Sharp dung tích lớn cho gia đình.",
+      "description": "Thiết kế hiện đại, nấu nhanh, giữ ấm tốt.",
+      "specs": {
+        "Dung tích": "1.8 lít",
+        "Công suất": "700W",
+        "Loại nồi": "Nắp gài"
+      },
+      "createdAt": "2026-04-26T10:20:00.000Z"
+    },
+    {
+      "id": "prod-007",
+      "slug": "noi-com-dien-sharp-ks-z181v",
+      "name": "Nồi cơm điện Sharp KS-Z181V 1.8L",
+      "sku": "GD-RC-SHARP-003",
+      "brand": "Sharp",
+      "categoryId": "cat-001",
+      "categorySlug": "noi-com-dien",
+      "price": 1390000,
+      "compareAtPrice": 1550000,
+      "stock": 18,
+      "featured": false,
+      "rating": 4.5,
+      "reviewCount": 60,
+      "images": [
+        "/Noicom/noi-com-dien-sharp-ks-z181v.png"
+      ],
+      "shortDescription": "Nồi cơm điện Sharp giá tốt, dễ dùng.",
+      "description": "Phù hợp gia đình nhỏ, tiết kiệm điện.",
+      "specs": {
+        "Dung tích": "1.8 lít",
+        "Công suất": "650W",
+        "Loại nồi": "Nắp gài"
+      },
+      "createdAt": "2026-04-26T10:30:00.000Z"
+    },
+    {
+      "id": "prod-008",
+      "slug": "noi-com-dien-asia-ar18",
+      "name": "Nồi cơm điện Asia AR18 1.8L",
+      "sku": "GD-RC-ASIA-001",
+      "brand": "Asia",
+      "categoryId": "cat-001",
+      "categorySlug": "noi-com-dien",
+      "price": 890000,
+      "compareAtPrice": 1100000,
+      "stock": 25,
+      "featured": false,
+      "rating": 4.4,
+      "reviewCount": 55,
+      "images": [
+        "/Noicom/noi-com-dien-asia-ar18.png"
+      ],
+      "shortDescription": "Nồi cơm điện Asia giá rẻ, dễ sử dụng.",
+      "description": "Thiết kế đơn giản, phù hợp gia đình phổ thông.",
+      "specs": {
+        "Dung tích": "1.8 lít",
+        "Công suất": "700W",
+        "Loại nồi": "Nắp gài"
+      },
+      "createdAt": "2026-04-26T10:40:00.000Z"
+    },
+    {
+      "id": "prod-009",
+      "slug": "noi-com-dien-asia-ar15",
+      "name": "Nồi cơm điện Asia AR15 1.5L",
+      "sku": "GD-RC-ASIA-002",
+      "brand": "Asia",
+      "categoryId": "cat-001",
+      "categorySlug": "noi-com-dien",
+      "price": 750000,
+      "compareAtPrice": 900000,
+      "stock": 28,
+      "featured": false,
+      "rating": 4.3,
+      "reviewCount": 40,
+      "images": [
+        "/Noicom/noi-com-dien-asia-ar15.png"
+      ],
+      "shortDescription": "Nồi cơm điện nhỏ gọn cho 2-3 người.",
+      "description": "Phù hợp sinh viên hoặc gia đình nhỏ.",
+      "specs": {
+        "Dung tích": "1.5 lít",
+        "Công suất": "600W",
+        "Loại nồi": "Nắp gài"
+      },
+      "createdAt": "2026-04-26T10:50:00.000Z"
+    },
+    {
+      "id": "prod-010",
+      "slug": "noi-com-dien-deerma-dr18",
+      "name": "Nồi cơm điện Deerma DR18 1.8L",
+      "sku": "GD-RC-DEER-001",
+      "brand": "Deerma",
+      "categoryId": "cat-001",
+      "categorySlug": "noi-com-dien",
+      "price": 1190000,
+      "compareAtPrice": 1390000,
+      "stock": 20,
+      "featured": true,
+      "rating": 4.5,
+      "reviewCount": 70,
+      "images": [
+        "/Noicom/noi-com-dien-deerma-dr18.png"
+      ],
+      "shortDescription": "Nồi cơm điện Deerma thiết kế hiện đại.",
+      "description": "Nấu nhanh, giữ nhiệt tốt, tiết kiệm điện.",
+      "specs": {
+        "Dung tích": "1.8 lít",
+        "Công suất": "700W",
+        "Loại nồi": "Điện tử"
+      },
+      "createdAt": "2026-04-26T11:00:00.000Z"
+    },
+    {
+      "id": "prod-011",
+      "slug": "noi-com-dien-deerma-dr12",
+      "name": "Nồi cơm điện Deerma DR12 1.2L",
+      "sku": "GD-RC-DEER-002",
+      "brand": "Deerma",
+      "categoryId": "cat-001",
+      "categorySlug": "noi-com-dien",
+      "price": 990000,
+      "compareAtPrice": 1150000,
+      "stock": 22,
+      "featured": false,
+      "rating": 4.4,
+      "reviewCount": 50,
+      "images": [
+        "/Noicom/noi-com-dien-deerma-dr12.png"
+      ],
+      "shortDescription": "Nồi cơm điện nhỏ gọn, tiện lợi.",
+      "description": "Thiết kế hiện đại, phù hợp gia đình nhỏ.",
+      "specs": {
+        "Dung tích": "1.2 lít",
+        "Công suất": "600W",
+        "Loại nồi": "Điện tử"
+      },
+      "createdAt": "2026-04-26T11:10:00.000Z"
+    },
+    {
+      "id": "prod-012",
+      "slug": "noi-chien-khong-dau-philips-na120",
+      "name": "Nồi chiên không dầu Philips NA120/00 4.2L",
+      "sku": "GD-AF-PHI-002",
       "brand": "Philips",
       "categoryId": "cat-002",
       "categorySlug": "noi-chien-khong-dau",
-      "price": 1490000,
-      "compareAtPrice": 1890000,
-      "stock": 16,
+      "price": 1290000,
+      "compareAtPrice": 1590000,
+      "stock": 20,
       "featured": true,
-      "rating": 4.7,
-      "reviewCount": 98,
+      "rating": 4.6,
+      "reviewCount": 85,
       "images": [
-        "https://via.placeholder.com/800x800?text=GD-AF-PHI-001"
+        "/Noichien/noi-chien-khong-dau-philips-na120.png"
       ],
-      "shortDescription": "Nồi chiên không dầu 6.2L, phù hợp gia đình hiện đại.",
-      "description": "Dung tích lớn, nấu nướng tiện lợi, giảm dầu mỡ.",
+      "shortDescription": "Dung tích 4.2L, phù hợp gia đình nhỏ.",
+      "description": "Công nghệ Rapid Air giúp giảm dầu mỡ hiệu quả.",
       "specs": {
-        "Dung tích": "6.2 lít",
+        "Dung tích": "4.2 lít",
+        "Công suất": "1500W",
+        "Nhiệt độ": "80-200 độ C"
+      },
+      "createdAt": "2026-04-26T09:30:00.000Z"
+    },
+    {
+      "id": "prod-013",
+      "slug": "noi-chien-khong-dau-sharp-kf-af55",
+      "name": "Nồi chiên không dầu Sharp KF-AF55 5.5L",
+      "sku": "GD-AF-SHA-001",
+      "brand": "Sharp",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1390000,
+      "compareAtPrice": 1690000,
+      "stock": 18,
+      "featured": false,
+      "rating": 4.5,
+      "reviewCount": 70,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-sharp-kf-af55.png"
+      ],
+      "shortDescription": "Nồi chiên 5.5L tiện lợi cho gia đình.",
+      "description": "Thiết kế hiện đại, dễ sử dụng.",
+      "specs": {
+        "Dung tích": "5.5 lít",
+        "Công suất": "1600W",
+        "Nhiệt độ": "80-200 độ C"
+      },
+      "createdAt": "2026-04-26T09:40:00.000Z"
+    },
+    {
+      "id": "prod-014",
+      "slug": "noi-chien-khong-dau-sharp-kf-af70",
+      "name": "Nồi chiên không dầu Sharp KF-AF70 7L",
+      "sku": "GD-AF-SHA-002",
+      "brand": "Sharp",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1590000,
+      "compareAtPrice": 1990000,
+      "stock": 15,
+      "featured": false,
+      "rating": 4.6,
+      "reviewCount": 90,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-sharp-kf-af70.png"
+      ],
+      "shortDescription": "Dung tích lớn 7L cho gia đình đông người.",
+      "description": "Chiên nướng đa năng, tiết kiệm dầu.",
+      "specs": {
+        "Dung tích": "7 lít",
+        "Công suất": "1800W",
+        "Nhiệt độ": "80-200 độ C"
+      },
+      "createdAt": "2026-04-26T09:50:00.000Z"
+    },
+    {
+      "id": "prod-015",
+      "slug": "noi-chien-khong-dau-panasonic-nf-af20",
+      "name": "Nồi chiên không dầu Panasonic NF-AF20 5L",
+      "sku": "GD-AF-PAN-001",
+      "brand": "Panasonic",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1490000,
+      "compareAtPrice": 1790000,
+      "stock": 17,
+      "featured": false,
+      "rating": 4.7,
+      "reviewCount": 95,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-panasonic-nf-af20.png"
+      ],
+      "shortDescription": "Công nghệ Nhật, bền bỉ.",
+      "description": "Chiên không dầu, an toàn sức khỏe.",
+      "specs": {
+        "Dung tích": "5 lít",
+        "Công suất": "1600W",
+        "Nhiệt độ": "80-200 độ C"
+      },
+      "createdAt": "2026-04-26T10:00:00.000Z"
+    },
+    {
+      "id": "prod-016",
+      "slug": "noi-chien-khong-dau-panasonic-nf-af30",
+      "name": "Nồi chiên không dầu Panasonic NF-AF30 6L",
+      "sku": "GD-AF-PAN-002",
+      "brand": "Panasonic",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1690000,
+      "compareAtPrice": 1990000,
+      "stock": 14,
+      "featured": false,
+      "rating": 4.8,
+      "reviewCount": 110,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-panasonic-nf-af30.png"
+      ],
+      "shortDescription": "Dung tích lớn, phù hợp gia đình.",
+      "description": "Nấu nhanh, tiết kiệm điện.",
+      "specs": {
+        "Dung tích": "6 lít",
         "Công suất": "1700W",
         "Nhiệt độ": "80-200 độ C"
       },
-      "createdAt": "2026-04-26T09:10:00.000Z"
+      "createdAt": "2026-04-26T10:10:00.000Z"
     },
     {
-      "id": "prod-003",
+      "id": "prod-017",
+      "slug": "noi-chien-khong-dau-sunhouse-shd4086",
+      "name": "Nồi chiên không dầu Sunhouse SHD4086 6L",
+      "sku": "GD-AF-SUN-001",
+      "brand": "Sunhouse",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1190000,
+      "compareAtPrice": 1490000,
+      "stock": 25,
+      "featured": true,
+      "rating": 4.5,
+      "reviewCount": 80,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-sunhouse-shd4086.png"
+      ],
+      "shortDescription": "Dung tích lớn, giá rẻ.",
+      "description": "Phù hợp gia đình Việt, tiết kiệm điện.",
+      "specs": {
+        "Dung tích": "6 lít",
+        "Công suất": "1500W",
+        "Nhiệt độ": "80-200 độ C"
+      },
+      "createdAt": "2026-04-26T10:20:00.000Z"
+    },
+    {
+      "id": "prod-018",
+      "slug": "noi-chien-khong-dau-sunhouse-shd4088",
+      "name": "Nồi chiên không dầu Sunhouse SHD4088 8L",
+      "sku": "GD-AF-SUN-002",
+      "brand": "Sunhouse",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1390000,
+      "compareAtPrice": 1690000,
+      "stock": 20,
+      "featured": true,
+      "rating": 4.6,
+      "reviewCount": 95,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-sunhouse-shd4088.png"
+      ],
+      "shortDescription": "Dung tích lớn 8L cho gia đình đông người.",
+      "description": "Chiên nướng đa năng, dễ sử dụng.",
+      "specs": {
+        "Dung tích": "8 lít",
+        "Công suất": "1700W",
+        "Nhiệt độ": "80-200 độ C"
+      },
+      "createdAt": "2026-04-26T10:30:00.000Z"
+    },
+    {
+      "id": "prod-019",
+      "slug": "noi-chien-khong-dau-asia-af50",
+      "name": "Nồi chiên không dầu Asia AF50 5L",
+      "sku": "GD-AF-ASIA-001",
+      "brand": "Asia",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 990000,
+      "compareAtPrice": 1290000,
+      "stock": 22,
+      "featured": true,
+      "rating": 4.4,
+      "reviewCount": 60,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-asia-af50.png"
+      ],
+      "shortDescription": "Giá rẻ, dễ sử dụng.",
+      "description": "Phù hợp sinh viên và gia đình nhỏ.",
+      "specs": {
+        "Dung tích": "5 lít",
+        "Công suất": "1400W",
+        "Nhiệt độ": "80-200 độ C"
+      },
+      "createdAt": "2026-04-26T10:40:00.000Z"
+    },
+    {
+      "id": "prod-020",
+      "slug": "noi-chien-khong-dau-asia-af70",
+      "name": "Nồi chiên không dầu Asia AF70 7L",
+      "sku": "GD-AF-ASIA-002",
+      "brand": "Asia",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1190000,
+      "compareAtPrice": 1490000,
+      "stock": 18,
+      "featured": true,
+      "rating": 4.5,
+      "reviewCount": 75,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-asia-af70.png"
+      ],
+      "shortDescription": "Dung tích lớn, giá tốt.",
+      "description": "Chiên nhanh, tiết kiệm điện.",
+      "specs": {
+        "Dung tích": "7 lít",
+        "Công suất": "1600W",
+        "Nhiệt độ": "80-200 độ C"
+      },
+      "createdAt": "2026-04-26T10:50:00.000Z"
+    },
+    {
+      "id": "prod-021",
+      "slug": "noi-chien-khong-dau-xiaomi-mi-smart-3l",
+      "name": "Nồi chiên không dầu Xiaomi Mi Smart 3.5L",
+      "sku": "GD-AF-XIA-001",
+      "brand": "Xiaomi",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1290000,
+      "compareAtPrice": 1590000,
+      "stock": 19,
+      "featured": true,
+      "rating": 4.7,
+      "reviewCount": 120,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-xiaomi-mi-smart-3l.png"
+      ],
+      "shortDescription": "Thiết kế hiện đại, điều khiển app.",
+      "description": "Kết nối smartphone, nấu ăn thông minh.",
+      "specs": {
+        "Dung tích": "3.5 lít",
+        "Công suất": "1500W",
+        "Nhiệt độ": "40-200 độ C"
+      },
+      "createdAt": "2026-04-26T11:00:00.000Z"
+    },
+    {
+      "id": "prod-022",
+      "slug": "noi-chien-khong-dau-xiaomi-mi-smart-6l",
+      "name": "Nồi chiên không dầu Xiaomi Mi Smart 6L",
+      "sku": "GD-AF-XIA-002",
+      "brand": "Xiaomi",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1590000,
+      "compareAtPrice": 1990000,
+      "stock": 16,
+      "featured": true,
+      "rating": 4.8,
+      "reviewCount": 150,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-xiaomi-mi-smart-6l.png"
+      ],
+      "shortDescription": "Dung tích lớn, smart control.",
+      "description": "Kết nối app, nấu đa chế độ.",
+      "specs": {
+        "Dung tích": "6 lít",
+        "Công suất": "1800W",
+        "Nhiệt độ": "40-200 độ C"
+      },
+      "createdAt": "2026-04-26T11:10:00.000Z"
+    },
+    {
+      "id": "prod-023",
+      "slug": "noi-chien-khong-dau-deerma-kz120",
+      "name": "Nồi chiên không dầu Deerma KZ120 5L",
+      "sku": "GD-AF-DEE-001",
+      "brand": "Deerma",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1090000,
+      "compareAtPrice": 1390000,
+      "stock": 21,
+      "featured": true,
+      "rating": 4.4,
+      "reviewCount": 65,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-deerma-kz120.png"
+      ],
+      "shortDescription": "Thiết kế nhỏ gọn, tiện lợi.",
+      "description": "Phù hợp không gian bếp nhỏ.",
+      "specs": {
+        "Dung tích": "5 lít",
+        "Công suất": "1400W",
+        "Nhiệt độ": "80-200 độ C"
+      },
+      "createdAt": "2026-04-26T11:20:00.000Z"
+    },
+    {
+      "id": "prod-024",
+      "slug": "noi-chien-khong-dau-deerma-kz150",
+      "name": "Nồi chiên không dầu Deerma KZ150 6.5L",
+      "sku": "GD-AF-DEE-002",
+      "brand": "Deerma",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1290000,
+      "compareAtPrice": 1590000,
+      "stock": 17,
+      "featured": true,
+      "rating": 4.5,
+      "reviewCount": 78,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-deerma-kz150.png"
+      ],
+      "shortDescription": "Dung tích lớn, giá hợp lý.",
+      "description": "Chiên nhanh, tiết kiệm điện.",
+      "specs": {
+        "Dung tích": "6.5 lít",
+        "Công suất": "1600W",
+        "Nhiệt độ": "80-200 độ C"
+      },
+      "createdAt": "2026-04-26T11:30:00.000Z"
+    },
+    {
+      "id": "prod-025",
+      "slug": "noi-chien-khong-dau-kangaroo-kg50",
+      "name": "Nồi chiên không dầu Kangaroo KG50 5L",
+      "sku": "GD-AF-KAN-001",
+      "brand": "Kangaroo",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1090000,
+      "compareAtPrice": 1390000,
+      "stock": 23,
+      "featured": true,
+      "rating": 4.5,
+      "reviewCount": 88,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-kangaroo-kg50.png"
+      ],
+      "shortDescription": "Giá tốt, dễ dùng.",
+      "description": "Phù hợp mọi gia đình.",
+      "specs": {
+        "Dung tích": "5 lít",
+        "Công suất": "1500W",
+        "Nhiệt độ": "80-200 độ C"
+      },
+      "createdAt": "2026-04-26T11:40:00.000Z"
+    },
+    {
+      "id": "prod-026",
+      "slug": "noi-chien-khong-dau-kangaroo-kg80",
+      "name": "Nồi chiên không dầu Kangaroo KG80 8L",
+      "sku": "GD-AF-KAN-002",
+      "brand": "Kangaroo",
+      "categoryId": "cat-002",
+      "categorySlug": "noi-chien-khong-dau",
+      "price": 1390000,
+      "compareAtPrice": 1790000,
+      "stock": 19,
+      "featured": true,
+      "rating": 4.6,
+      "reviewCount": 100,
+      "images": [
+        "/Noichien/noi-chien-khong-dau-kangaroo-kg80.png"
+      ],
+      "shortDescription": "Dung tích cực lớn 8L.",
+      "description": "Chiên nướng đa năng.",
+      "specs": {
+        "Dung tích": "8 lít",
+        "Công suất": "1800W",
+        "Nhiệt độ": "80-200 độ C"
+      },
+      "createdAt": "2026-04-26T11:50:00.000Z"
+    },
+    {
+      "id": "prod-027",
       "slug": "quat-dung-asia-vy639990",
       "name": "Quạt đứng Asia VY639990 80W",
       "sku": "GD-FN-ASIA-001",
@@ -85,7 +708,7 @@
       "rating": 4.6,
       "reviewCount": 76,
       "images": [
-        "https://via.placeholder.com/800x800?text=GD-FN-ASIA-001"
+        "/Quat/quat-dung-asia-vy639990.png"
       ],
       "shortDescription": "Quạt đứng 6 cánh, công suất 80W.",
       "description": "Quạt đứng phù hợp phòng khách, phòng ngủ và văn phòng.",
@@ -95,6 +718,240 @@
         "Số cánh": "6 cánh"
       },
       "createdAt": "2026-04-26T09:20:00.000Z"
+    },
+    {
+      "id": "prod-028",
+      "slug": "quat-dung-asia-vy639991",
+      "name": "Quạt đứng Asia VY639991 90W",
+      "sku": "GD-FN-ASIA-002",
+      "brand": "Asia",
+      "categoryId": "cat-003",
+      "categorySlug": "quat-dien",
+      "price": 890000,
+      "compareAtPrice": 990000,
+      "stock": 20,
+      "featured": true,
+      "rating": 4.7,
+      "reviewCount": 82,
+      "images": [
+        "/Quat/quat-dung-asia-vy639991.png"
+      ],
+      "shortDescription": "Quạt đứng công suất mạnh, 90W.",
+      "description": "Gió mạnh, phù hợp phòng khách rộng.",
+      "specs": {
+        "Công suất": "90W",
+        "Loại quạt": "Quạt đứng",
+        "Số cánh": "5 cánh"
+      },
+      "createdAt": "2026-04-26T12:00:00.000Z"
+    },
+    {
+      "id": "prod-029",
+      "slug": "quat-dung-sunhouse-shd7323",
+      "name": "Quạt đứng Sunhouse SHD7323 85W",
+      "sku": "GD-FN-SUN-001",
+      "brand": "Sunhouse",
+      "categoryId": "cat-003",
+      "categorySlug": "quat-dien",
+      "price": 750000,
+      "compareAtPrice": 850000,
+      "stock": 25,
+      "featured": true,
+      "rating": 4.5,
+      "reviewCount": 70,
+      "images": [
+        "/Quat/quat-dung-sunhouse-shd7323.png"
+      ],
+      "shortDescription": "Quạt đứng tiết kiệm điện.",
+      "description": "Thiết kế hiện đại, chạy êm.",
+      "specs": {
+        "Công suất": "85W",
+        "Loại quạt": "Quạt đứng",
+        "Số cánh": "5 cánh"
+      },
+      "createdAt": "2026-04-26T12:10:00.000Z"
+    },
+    {
+      "id": "prod-030",
+      "slug": "quat-lung-sunhouse-shd7212",
+      "name": "Quạt lửng Sunhouse SHD7212 65W",
+      "sku": "GD-FN-SUN-002",
+      "brand": "Sunhouse",
+      "categoryId": "cat-003",
+      "categorySlug": "quat-dien",
+      "price": 650000,
+      "compareAtPrice": 750000,
+      "stock": 18,
+      "featured": true,
+      "rating": 4.4,
+      "reviewCount": 60,
+      "images": [
+        "/Quat/quat-lung-sunhouse-shd7212.png"
+      ],
+      "shortDescription": "Quạt lửng nhỏ gọn.",
+      "description": "Phù hợp phòng ngủ và không gian nhỏ.",
+      "specs": {
+        "Công suất": "65W",
+        "Loại quạt": "Quạt lửng",
+        "Số cánh": "5 cánh"
+      },
+      "createdAt": "2026-04-26T12:20:00.000Z"
+    },
+    {
+      "id": "prod-031",
+      "slug": "quat-thong-minh-xiaomi-mi-smart-fan",
+      "name": "Quạt thông minh Xiaomi Mi Smart Fan 60W",
+      "sku": "GD-FN-XIA-001",
+      "brand": "Xiaomi",
+      "categoryId": "cat-003",
+      "categorySlug": "quat-dien",
+      "price": 1290000,
+      "compareAtPrice": 1590000,
+      "stock": 15,
+      "featured": true,
+      "rating": 4.8,
+      "reviewCount": 110,
+      "images": [
+        "/Quat/quat-thong-minh-xiaomi-mi-smart-fan.png"
+      ],
+      "shortDescription": "Quạt thông minh điều khiển app.",
+      "description": "Kết nối điện thoại, gió tự nhiên.",
+      "specs": {
+        "Công suất": "60W",
+        "Loại quạt": "Quạt đứng thông minh",
+        "Số cánh": "7 cánh"
+      },
+      "createdAt": "2026-04-26T12:30:00.000Z"
+    },
+    {
+      "id": "prod-032",
+      "slug": "quat-mini-deerma-fd10",
+      "name": "Quạt mini Deerma FD10 40W",
+      "sku": "GD-FN-DEE-001",
+      "brand": "Deerma",
+      "categoryId": "cat-003",
+      "categorySlug": "quat-dien",
+      "price": 450000,
+      "compareAtPrice": 550000,
+      "stock": 30,
+      "featured": true,
+      "rating": 4.3,
+      "reviewCount": 55,
+      "images": [
+        "/Quat/quat-mini-deerma-fd10.png"
+      ],
+      "shortDescription": "Quạt mini nhỏ gọn.",
+      "description": "Phù hợp bàn làm việc, dễ mang theo.",
+      "specs": {
+        "Công suất": "40W",
+        "Loại quạt": "Quạt mini",
+        "Số cánh": "3 cánh"
+      },
+      "createdAt": "2026-04-26T12:40:00.000Z"
+    },
+    {
+      "id": "prod-033",
+      "slug": "quat-dung-kangaroo-kg723",
+      "name": "Quạt đứng Kangaroo KG723 85W",
+      "sku": "GD-FN-KAN-001",
+      "brand": "Kangaroo",
+      "categoryId": "cat-003",
+      "categorySlug": "quat-dien",
+      "price": 790000,
+      "compareAtPrice": 890000,
+      "stock": 22,
+      "featured": true,
+      "rating": 4.6,
+      "reviewCount": 75,
+      "images": [
+        "/Quat/quat-dung-kangaroo-kg723.png"
+      ],
+      "shortDescription": "Quạt đứng mạnh mẽ.",
+      "description": "Gió mạnh, hoạt động bền bỉ.",
+      "specs": {
+        "Công suất": "85W",
+        "Loại quạt": "Quạt đứng",
+        "Số cánh": "5 cánh"
+      },
+      "createdAt": "2026-04-26T12:50:00.000Z"
+    },
+    {
+      "id": "prod-034",
+      "slug": "quat-dung-sharp-pj-l40rv",
+      "name": "Quạt đứng Sharp PJ-L40RV 90W",
+      "sku": "GD-FN-SHARP-001",
+      "brand": "Sharp",
+      "categoryId": "cat-003",
+      "categorySlug": "quat-dien",
+      "price": 950000,
+      "compareAtPrice": 1100000,
+      "stock": 18,
+      "featured": true,
+      "rating": 4.7,
+      "reviewCount": 88,
+      "images": [
+        "/Quat/quat-dung-sharp-pj-l40rv.png"
+      ],
+      "shortDescription": "Quạt đứng Sharp công suất mạnh, hoạt động êm.",
+      "description": "Thiết kế hiện đại, 3 tốc độ gió, phù hợp mọi không gian.",
+      "specs": {
+        "Công suất": "90W",
+        "Loại quạt": "Quạt đứng",
+        "Số cánh": "5 cánh"
+      },
+      "createdAt": "2026-04-26T10:00:00.000Z"
+    },
+    {
+      "id": "prod-035",
+      "slug": "quat-dung-philips-cx5535",
+      "name": "Quạt đứng Philips CX5535 75W",
+      "sku": "GD-FN-PHI-001",
+      "brand": "Philips",
+      "categoryId": "cat-003",
+      "categorySlug": "quat-dien",
+      "price": 1200000,
+      "compareAtPrice": 1400000,
+      "stock": 15,
+      "featured": true,
+      "rating": 4.8,
+      "reviewCount": 102,
+      "images": [
+        "/Quat/quat-dung-philips-cx5535.png"
+      ],
+      "shortDescription": "Quạt Philips cao cấp, tiết kiệm điện.",
+      "description": "Vận hành êm ái, điều khiển từ xa tiện lợi.",
+      "specs": {
+        "Công suất": "75W",
+        "Loại quạt": "Quạt đứng",
+        "Số cánh": "7 cánh"
+      },
+      "createdAt": "2026-04-26T10:10:00.000Z"
+    },
+    {
+      "id": "prod-036",
+      "slug": "quat-dung-panasonic-f409kb",
+      "name": "Quạt đứng Panasonic F-409KB 64W",
+      "sku": "GD-FN-PAN-001",
+      "brand": "Panasonic",
+      "categoryId": "cat-003",
+      "categorySlug": "quat-dien",
+      "price": 1050000,
+      "compareAtPrice": 1250000,
+      "stock": 20,
+      "featured": true,
+      "rating": 4.7,
+      "reviewCount": 95,
+      "images": [
+        "/Quat/quat-dung-panasonic-f409kb.png"
+      ],
+      "shortDescription": "Quạt Panasonic bền bỉ, gió mạnh.",
+      "description": "Thiết kế chắc chắn, phù hợp gia đình và văn phòng.",
+      "specs": {
+        "Công suất": "64W",
+        "Loại quạt": "Quạt đứng",
+        "Số cánh": "5 cánh"
+      },
+      "createdAt": "2026-04-26T10:20:00.000Z"
     }
   ],
   "banners": [
@@ -183,6 +1040,86 @@
       "status": "pending",
       "createdAt": "2026-04-26T12:55:03.454Z",
       "id": "EmvteaCUSbQ"
+    },
+    {
+      "fullName": "Dang Tran Duong",
+      "phone": "252785858",
+      "address": "68 nguyễn tư giản",
+      "paymentMethod": "cod",
+      "userId": "srZJ8USLW_k",
+      "items": [
+        {
+          "id": "prod-002",
+          "slug": "noi-chien-khong-dau-philips-na130",
+          "name": "Nồi chiên không dầu Philips NA130/00 6.2L",
+          "sku": "GD-AF-PHI-001",
+          "brand": "Philips",
+          "categoryId": "cat-002",
+          "categorySlug": "noi-chien-khong-dau",
+          "price": 1490000,
+          "compareAtPrice": 1890000,
+          "stock": 16,
+          "featured": true,
+          "rating": 4.7,
+          "reviewCount": 98,
+          "images": [
+            "https://via.placeholder.com/800x800?text=GD-AF-PHI-001"
+          ],
+          "shortDescription": "Nồi chiên không dầu 6.2L, phù hợp gia đình hiện đại.",
+          "description": "Dung tích lớn, nấu nướng tiện lợi, giảm dầu mỡ.",
+          "specs": {
+            "Dung tích": "6.2 lít",
+            "Công suất": "1700W",
+            "Nhiệt độ": "80-200 độ C"
+          },
+          "createdAt": "2026-04-26T09:10:00.000Z",
+          "quantity": 2
+        }
+      ],
+      "subtotal": 2980000,
+      "status": "pending",
+      "createdAt": "2026-04-30T14:52:17.556Z",
+      "id": "zsZ18OAPszA"
+    },
+    {
+      "fullName": "Dang Tran Duong",
+      "phone": "555566996",
+      "address": "ggh5566987",
+      "paymentMethod": "bank",
+      "userId": "srZJ8USLW_k",
+      "items": [
+        {
+          "id": "prod-008",
+          "slug": "noi-com-dien-asia-ar18",
+          "name": "Nồi cơm điện Asia AR18 1.8L",
+          "sku": "GD-RC-ASIA-001",
+          "brand": "Asia",
+          "categoryId": "cat-001",
+          "categorySlug": "noi-com-dien",
+          "price": 890000,
+          "compareAtPrice": 1100000,
+          "stock": 25,
+          "featured": false,
+          "rating": 4.4,
+          "reviewCount": 55,
+          "images": [
+            "/Noicom/noi-com-dien-asia-ar18.png"
+          ],
+          "shortDescription": "Nồi cơm điện Asia giá rẻ, dễ sử dụng.",
+          "description": "Thiết kế đơn giản, phù hợp gia đình phổ thông.",
+          "specs": {
+            "Dung tích": "1.8 lít",
+            "Công suất": "700W",
+            "Loại nồi": "Nắp gài"
+          },
+          "createdAt": "2026-04-26T10:40:00.000Z",
+          "quantity": 2
+        }
+      ],
+      "subtotal": 1780000,
+      "status": "pending",
+      "createdAt": "2026-04-30T17:30:46.507Z",
+      "id": "HrowKPlIp9U"
     }
   ],
   "contactMessages": [],
@@ -199,6 +1136,13 @@
       "email": "duong@example.com",
       "password": "123",
       "fullName": "Đặng Trần Dương",
+      "role": "customer"
+    },
+    {
+      "email": "tranduong131005@gmail.com",
+      "password": "tranduong1310",
+      "fullName": "Dang Tran Duong",
+      "id": "srZJ8USLW_k",
       "role": "customer"
     }
   ],
