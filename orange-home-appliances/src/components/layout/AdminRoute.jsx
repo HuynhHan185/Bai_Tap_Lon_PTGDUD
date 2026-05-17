@@ -11,7 +11,7 @@ export default function AdminRoute({ children }) {
     return <Navigate to="/tai-khoan/dang-nhap" state={{ from: location }} replace />
   }
 
-  if (user?.role !== 'admin') {
+  if (user?.ma_role !== 1) {
     return <Navigate to="/" replace />
   }
 

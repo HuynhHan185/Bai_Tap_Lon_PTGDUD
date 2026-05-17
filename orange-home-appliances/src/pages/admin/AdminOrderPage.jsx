@@ -11,7 +11,7 @@ import {
   ProfileOutlined,
   ReloadOutlined 
 } from '@ant-design/icons'
-import { getAllOrders, updateOrder, deleteOrder } from '../../services/api'
+import { getAllOrders, updateOrderStatus, deleteOrder, getOrderDetail } from '../../services/api'
 import dayjs from 'dayjs'
 
 const { Title, Text } = Typography
@@ -36,18 +36,31 @@ export default function AdminOrderPage() {
   const [searchText, setSearchText] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [detailModal, setDetailModal] = useState(null)
+  const [detailLoading, setDetailLoading] = useState(false)
 
   const loadData = async () => {
     setLoading(true)
     try {
-      const data = await getAllOrders()
-      const sorted = (data || []).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      const resp = await getAllOrders()
+      const list = resp?.orders || resp || []
+      const sorted = [...list].sort((a, b) => new Date(b.ngay_tao) - new Date(a.ngay_tao))
       setOrders(sorted)
       setFilteredOrders(sorted)
     } catch (err) {
       message.error('Lỗi tải danh sách đơn hàng')
     }
     setLoading(false)
+  }
+
+  const handleViewDetail = async (record) => {
+    setDetailLoading(true)
+    try {
+      const resp = await getOrderDetail(record.ma_don_hang)
+      setDetailModal(resp.order || resp)
+    } catch {
+      setDetailModal(record)
+    }
+    setDetailLoading(false)
   }
 
   useEffect(() => {
@@ -59,20 +72,20 @@ export default function AdminOrderPage() {
     if (searchText) {
       const lower = searchText.toLowerCase()
       result = result.filter(o =>
-        o.fullName?.toLowerCase().includes(lower) ||
-        o.phone?.includes(lower) ||
-        o.id?.toLowerCase().includes(lower)
+        ([o.ho, o.ten].filter(Boolean).join(' '))?.toLowerCase().includes(lower) ||
+        o.so_dien_thoai?.includes(lower) ||
+        o.ma_don_hang?.toLowerCase().includes(lower)
       )
     }
     if (statusFilter !== 'all') {
-      result = result.filter(o => o.status === statusFilter)
+      result = result.filter(o => o.trang_thai === statusFilter)
     }
     setFilteredOrders(result)
   }, [searchText, statusFilter, orders])
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await updateOrder(orderId, { status: newStatus })
+      await updateOrderStatus(orderId, { trang_thai: newStatus })
       message.success('Đã cập nhật trạng thái đơn hàng')
       loadData()
     } catch (err) {
@@ -93,34 +106,36 @@ export default function AdminOrderPage() {
   const columns = [
     {
       title: 'Mã ĐH',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: 'ma_don_hang',
+      key: 'ma_don_hang',
       width: 130,
       render: (id) => <Text code style={{ fontSize: 12 }}>{id?.slice(0, 10)}</Text>
     },
     {
       title: 'Khách hàng',
-      dataIndex: 'fullName',
-      key: 'fullName',
-      render: (name, record) => (
+      dataIndex: 'ho',
+      key: 'ho',
+      render: (_, record) => (
         <div>
-          <Text strong>{name}</Text>
+          <Text strong>{[record.ho, record.ten].filter(Boolean).join(' ')}</Text>
           <br />
-          <Text type="secondary" style={{ fontSize: 12 }}>{record.phone}</Text>
+          <Text type="secondary" style={{ fontSize: 12 }}>{record.so_dien_thoai}</Text>
         </div>
       ),
     },
     {
       title: 'Ngày đặt',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
+      dataIndex: 'ngay_tao',
+      key: 'ngay_tao',
       width: 150,
-      sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+      sorter: (a, b) => new Date(a.ngay_tao) - new Date(b.ngay_tao),
       render: (date) => (
-        <Tooltip title={dayjs(date).format('DD/MM/YYYY HH:mm:ss')}>
-          <Text>{dayjs(date).format('DD/MM/YYYY')}</Text>
+        <Tooltip title={date ? new Date(date).toLocaleString('vi-VN') : ''}>
+          <Text>{date ? new Date(date).toLocaleDateString('vi-VN') : ''}</Text>
           <br />
-          <Text type="secondary" style={{ fontSize: 12 }}>{dayjs(date).format('HH:mm')}</Text>
+          <Text type="secondary" style={{ fontSize: 12 }}>
+            {date ? new Date(date).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : ''}
+          </Text>
         </Tooltip>
       ),
     },
@@ -129,27 +144,27 @@ export default function AdminOrderPage() {
       key: 'items',
       width: 100,
       render: (_, record) => (
-        <Badge count={record.items?.length || 0} color="#1677ff" showZero>
+        <Badge count={record.so_san_pham || 0} color="#1677ff" showZero>
           <Tag>SP</Tag>
         </Badge>
       ),
     },
     {
       title: 'Tổng tiền',
-      dataIndex: 'subtotal',
-      key: 'subtotal',
+      dataIndex: 'thanh_tien',
+      key: 'thanh_tien',
       width: 150,
-      sorter: (a, b) => (a.subtotal || 0) - (b.subtotal || 0),
+      sorter: (a, b) => (a.thanh_tien || 0) - (b.thanh_tien || 0),
       render: (val) => (
         <Text strong style={{ color: '#cf1322' }}>
-          {new Intl.NumberFormat('vi-VN').format(val)}₫
+          {new Intl.NumberFormat('vi-VN').format(val || 0)}₫
         </Text>
       ),
     },
     {
       title: 'Thanh toán',
-      dataIndex: 'paymentMethod',
-      key: 'paymentMethod',
+      dataIndex: 'phuong_thuc_thanh_toan',
+      key: 'phuong_thuc_thanh_toan',
       width: 130,
       render: (method) => {
         const pm = paymentMethodMap[method] || { label: method, color: 'default' }
@@ -158,25 +173,24 @@ export default function AdminOrderPage() {
     },
     {
       title: 'Trạng thái',
-      key: 'status',
+      dataIndex: 'trang_thai',
+      key: 'trang_thai',
       width: 150,
-      render: (_, record) => (
-        <Select
-          value={record.status}
-          onChange={(val) => handleStatusChange(record.id, val)}
-          style={{ width: 140 }}
-          dropdownMatchSelectWidth={false}
-          options={statusOptions.map(o => ({
-            value: o.value,
-            label: (
-              <Space>
-                {o.icon}
-                <span>{o.label}</span>
-              </Space>
-            )
-          }))}
-        />
-      )
+      render: (_, record) => {
+        const opt = statusOptions.find(o => o.value === record.trang_thai)
+        return (
+          <Select
+            value={record.trang_thai}
+            onChange={(val) => handleStatusChange(record.ma_don_hang, val)}
+            style={{ width: 140 }}
+            dropdownMatchSelectWidth={false}
+            options={statusOptions.map(o => ({
+              value: o.value,
+              label: <Space>{o.icon}<span>{o.label}</span></Space>
+            }))}
+          />
+        )
+      }
     },
     {
       title: 'Thao tác',
@@ -188,13 +202,13 @@ export default function AdminOrderPage() {
             <Button
               type="text"
               icon={<EyeOutlined />}
-              onClick={() => setDetailModal(record)}
+              onClick={() => handleViewDetail(record)}
             />
           </Tooltip>
           <Popconfirm
             title="Xóa đơn hàng này?"
             description="Hành động này không thể hoàn tác."
-            onConfirm={() => handleDeleteOrder(record.id)}
+            onConfirm={() => handleDeleteOrder(record.ma_don_hang)}
           >
             <Button type="text" danger icon={<DeleteOutlined />} />
           </Popconfirm>
@@ -204,48 +218,15 @@ export default function AdminOrderPage() {
   ]
 
   const expandedRowRender = (record) => {
-    const itemColumns = [
-      {
-        title: 'Sản phẩm',
-        dataIndex: 'name',
-        key: 'name',
-        render: (name) => <Text strong>{name}</Text>
-      },
-      { title: 'SKU', dataIndex: 'sku', key: 'sku' },
-      { title: 'Thương hiệu', dataIndex: 'brand', key: 'brand' },
-      {
-        title: 'Đơn giá',
-        dataIndex: 'price',
-        key: 'price',
-        render: (val) => new Intl.NumberFormat('vi-VN').format(val) + '₫'
-      },
-      { title: 'SL', dataIndex: 'quantity', key: 'quantity' },
-      {
-        title: 'Thành tiền',
-        key: 'total',
-        render: (_, item) => (
-          <Text strong style={{ color: '#cf1322' }}>
-            {new Intl.NumberFormat('vi-VN').format(item.price * (item.quantity || 1))}₫
-          </Text>
-        ),
-      },
-    ]
-
     return (
       <div style={{ padding: '0 16px' }}>
         <Descriptions size="small" column={3} style={{ marginBottom: 12 }}>
-          <Descriptions.Item label="Địa chỉ">{record.address}</Descriptions.Item>
+          <Descriptions.Item label="Địa chỉ">{record.dia_chi}</Descriptions.Item>
           <Descriptions.Item label="Phương thức TT">
-            {paymentMethodMap[record.paymentMethod]?.label || record.paymentMethod}
+            {paymentMethodMap[record.phuong_thuc_thanh_toan]?.label || record.phuong_thuc_thanh_toan}
           </Descriptions.Item>
+          <Descriptions.Item label="Số sản phẩm">{record.so_san_pham}</Descriptions.Item>
         </Descriptions>
-        <Table
-          columns={itemColumns}
-          dataSource={record.items || []}
-          rowKey={(item, idx) => item.id || idx}
-          pagination={false}
-          size="small"
-        />
       </div>
     )
   }
@@ -290,11 +271,11 @@ export default function AdminOrderPage() {
         <Table
           columns={columns}
           dataSource={filteredOrders}
-          rowKey="id"
+          rowKey="ma_don_hang"
           loading={loading}
           expandable={{
             expandedRowRender,
-            rowExpandable: (record) => record.items?.length > 0,
+            rowExpandable: () => false,
           }}
           scroll={{ x: 1100 }}
         />
@@ -312,29 +293,30 @@ export default function AdminOrderPage() {
         onCancel={() => setDetailModal(null)}
         footer={null}
         width={700}
+        loading={detailLoading}
       >
         {detailModal && (
           <div>
             <Descriptions bordered column={2} size="small">
-              <Descriptions.Item label="Mã đơn hàng">{detailModal.id}</Descriptions.Item>
+              <Descriptions.Item label="Mã đơn hàng">{detailModal.ma_don_hang}</Descriptions.Item>
               <Descriptions.Item label="Trạng thái">
                 {(() => {
-                  const s = statusOptions.find(o => o.value === detailModal.status)
-                  return s ? <Tag icon={s.icon} color={s.color}>{s.label}</Tag> : detailModal.status
+                  const s = statusOptions.find(o => o.value === detailModal.trang_thai)
+                  return s ? <Tag icon={s.icon} color={s.color}>{s.label}</Tag> : detailModal.trang_thai
                 })()}
               </Descriptions.Item>
-              <Descriptions.Item label="Khách hàng">{detailModal.fullName}</Descriptions.Item>
-              <Descriptions.Item label="Số điện thoại">{detailModal.phone}</Descriptions.Item>
-              <Descriptions.Item label="Địa chỉ" span={2}>{detailModal.address}</Descriptions.Item>
+              <Descriptions.Item label="Khách hàng">{[detailModal.ho, detailModal.ten].filter(Boolean).join(' ')}</Descriptions.Item>
+              <Descriptions.Item label="Số điện thoại">{detailModal.so_dien_thoai}</Descriptions.Item>
+              <Descriptions.Item label="Địa chỉ" span={2}>{detailModal.dia_chi}</Descriptions.Item>
               <Descriptions.Item label="Ngày đặt">
-                {dayjs(detailModal.createdAt).format('DD/MM/YYYY HH:mm:ss')}
+                {new Date(detailModal.ngay_tao).toLocaleString('vi-VN')}
               </Descriptions.Item>
               <Descriptions.Item label="Thanh toán">
-                {paymentMethodMap[detailModal.paymentMethod]?.label || detailModal.paymentMethod}
+                {paymentMethodMap[detailModal.phuong_thuc_thanh_toan]?.label || detailModal.phuong_thuc_thanh_toan}
               </Descriptions.Item>
               <Descriptions.Item label="Tổng tiền" span={2}>
                 <Text strong style={{ color: '#cf1322', fontSize: 18 }}>
-                  {new Intl.NumberFormat('vi-VN').format(detailModal.subtotal)}₫
+                  {new Intl.NumberFormat('vi-VN').format(detailModal.thanh_tien)}₫
                 </Text>
               </Descriptions.Item>
             </Descriptions>
@@ -342,27 +324,28 @@ export default function AdminOrderPage() {
             <Title level={5} style={{ marginTop: 20 }}>Sản phẩm</Title>
             <Table
               columns={[
-                { title: 'Tên', dataIndex: 'name', key: 'name' },
+                { title: 'Tên', dataIndex: 'ten_sp', key: 'ten_sp' },
                 { title: 'SKU', dataIndex: 'sku', key: 'sku' },
-                { title: 'SL', dataIndex: 'quantity', key: 'quantity', width: 60 },
+                { title: 'SL', dataIndex: 'so_luong', key: 'so_luong', width: 60 },
                 {
                   title: 'Đơn giá',
-                  dataIndex: 'price',
-                  key: 'price',
+                  dataIndex: 'don_gia',
+                  key: 'don_gia',
                   render: (v) => new Intl.NumberFormat('vi-VN').format(v) + '₫'
                 },
                 {
                   title: 'Thành tiền',
-                  key: 'total',
-                  render: (_, item) => (
-                    <Text strong>
-                      {new Intl.NumberFormat('vi-VN').format(item.price * (item.quantity || 1))}₫
+                  dataIndex: 'thanh_tien',
+                  key: 'thanh_tien',
+                  render: (v) => (
+                    <Text strong style={{ color: '#cf1322' }}>
+                      {new Intl.NumberFormat('vi-VN').format(v)}₫
                     </Text>
                   ),
                 },
               ]}
               dataSource={detailModal.items || []}
-              rowKey={(item, idx) => item.id || idx}
+              rowKey={(item, idx) => item.ma_sp || idx}
               pagination={false}
               size="small"
             />

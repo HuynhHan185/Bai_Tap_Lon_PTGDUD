@@ -3,7 +3,7 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const adminOnly = require('../middleware/adminOnly');
 const { getMyProfile, updateMyProfile, changeMyPassword } = require('../controllers/user.controller');
-const { getAllUsers } = require('../controllers/auth.controller');
+const { getAllUsers, updateUser, deleteUser } = require('../controllers/auth.controller');
 const { body } = require('express-validator');
 const validate = require('../middleware/validate');
 
@@ -23,5 +23,7 @@ router.put(
 
 // Admin: manage users
 router.get('/admin', auth, adminOnly, getAllUsers);
+router.patch('/:id', auth, adminOnly, updateUser);
+router.delete('/:id', auth, adminOnly, deleteUser);
 
 module.exports = router;

@@ -11,6 +11,22 @@ export default defineConfig({
         target: 'http://localhost:3001',
         changeOrigin: true,
       },
+      '/Noichien': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/Noicom': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/Quat': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/uploads': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
     },
   },
 })

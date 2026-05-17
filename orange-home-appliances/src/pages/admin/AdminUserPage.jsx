@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
-import { 
-  Table, Button, Space, Modal, Form, Input, Select, message, 
-  Popconfirm, Tag, Card, Typography, Tooltip, Badge, Avatar
+import {
+  Table, Button, Space, Modal, Form, Input, Select, message,
+  Popconfirm, Tag, Card, Typography, Tooltip, Avatar
 } from 'antd'
-import { 
-  EditOutlined, DeleteOutlined, PlusOutlined, UserOutlined, 
+import {
+  EditOutlined, DeleteOutlined, PlusOutlined, UserOutlined,
   SearchOutlined, ReloadOutlined, MailOutlined, PhoneOutlined,
   CrownOutlined, TeamOutlined
 } from '@ant-design/icons'
-import { getAllUsers, updateUser, deleteUser, register } from '../../services/api'
+import { getAdminUsers, updateUser, deleteUser, register } from '../../services/api'
 
 const { Title, Text } = Typography
 
@@ -25,7 +25,7 @@ export default function AdminUserPage() {
   const loadData = async () => {
     setLoading(true)
     try {
-      const data = await getAllUsers()
+      const data = await getAdminUsers()
       setUsers(data || [])
       setFilteredUsers(data || [])
     } catch (err) {
@@ -43,9 +43,9 @@ export default function AdminUserPage() {
     if (searchText) {
       const lower = searchText.toLowerCase()
       result = result.filter(u =>
-        u.fullName?.toLowerCase().includes(lower) ||
-        u.email?.toLowerCase().includes(lower) ||
-        u.phone?.includes(lower)
+        (u.fullName || '').toLowerCase().includes(lower) ||
+        (u.email || '').toLowerCase().includes(lower) ||
+        (u.so_dien_thoai || '').includes(lower)
       )
     }
     if (roleFilter !== 'all') {
@@ -57,18 +57,26 @@ export default function AdminUserPage() {
   const handleAdd = () => {
     setEditingId(null)
     form.resetFields()
-    form.setFieldsValue({ role: 'customer' })
+    form.setFieldsValue({ ma_role: 2 })
     setIsModalOpen(true)
   }
 
   const handleEdit = (record) => {
-    setEditingId(record.id)
-    form.setFieldsValue(record)
+    setEditingId(record.ma_user)
+    form.setFieldsValue({
+      ho: record.ho,
+      ten: record.ten,
+      email: record.email,
+      so_dien_thoai: record.so_dien_thoai,
+      dia_chi: record.dia_chi,
+      ma_role: record.ma_role,
+      trang_thai: record.trang_thai,
+    })
     setIsModalOpen(true)
   }
 
   const handleDelete = async (id) => {
-    const user = users.find(u => u.id === id)
+    const user = users.find(u => u.ma_user === id)
     if (user?.role === 'admin') {
       message.warning('Không thể xóa tài khoản admin')
       return
@@ -78,18 +86,24 @@ export default function AdminUserPage() {
       message.success('Đã xóa người dùng')
       loadData()
     } catch (err) {
-      message.error('Lỗi khi xóa người dùng')
+      message.error(err.message || 'Lỗi khi xóa người dùng')
     }
   }
 
   const handleSave = async (values) => {
     try {
       if (editingId) {
-        const { password, ...updateData } = values
-        await updateUser(editingId, updateData)
+        await updateUser(editingId, values)
         message.success('Đã cập nhật người dùng')
       } else {
-        await register(values)
+        await register({
+          ho: values.ho,
+          ten: values.ten,
+          email: values.email,
+          mat_khau: values.mat_khau,
+          so_dien_thoai: values.so_dien_thoai,
+          dia_chi: values.dia_chi,
+        })
         message.success('Đã thêm người dùng mới')
       }
       setIsModalOpen(false)
@@ -116,7 +130,7 @@ export default function AdminUserPage() {
             style={{ backgroundColor: getAvatarColor(record.fullName) }}
             icon={record.role === 'admin' ? <CrownOutlined /> : <UserOutlined />}
           >
-            {record.fullName?.charAt(0)?.toUpperCase()}
+            {(record.fullName || '?').charAt(0)?.toUpperCase()}
           </Avatar>
           <div>
             <Text strong>{record.fullName}</Text>
@@ -131,8 +145,8 @@ export default function AdminUserPage() {
     },
     {
       title: 'Số điện thoại',
-      dataIndex: 'phone',
-      key: 'phone',
+      dataIndex: 'so_dien_thoai',
+      key: 'so_dien_thoai',
       width: 150,
       render: (phone) => phone ? (
         <Space>
@@ -141,9 +155,9 @@ export default function AdminUserPage() {
         </Space>
       ) : <Text type="secondary">Chưa cập nhật</Text>
     },
-    { 
-      title: 'Vai trò', 
-      dataIndex: 'role', 
+    {
+      title: 'Vai trò',
+      dataIndex: 'role',
       key: 'role',
       width: 140,
       render: (role) => (
@@ -156,9 +170,9 @@ export default function AdminUserPage() {
     },
     {
       title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-      width: 140,
+      dataIndex: 'ma_user',
+      key: 'ma_user',
+      width: 60,
       render: (id) => <Text code style={{ fontSize: 11 }}>{id}</Text>
     },
     {
@@ -171,7 +185,7 @@ export default function AdminUserPage() {
             <Button type="text" icon={<EditOutlined />} onClick={() => handleEdit(record)} />
           </Tooltip>
           {record.role !== 'admin' ? (
-            <Popconfirm title="Chắc chắn xóa người dùng này?" onConfirm={() => handleDelete(record.id)}>
+            <Popconfirm title="Chắc chắn xóa người dùng này?" onConfirm={() => handleDelete(record.ma_user)}>
               <Tooltip title="Xóa">
                 <Button type="text" danger icon={<DeleteOutlined />} />
               </Tooltip>
@@ -203,7 +217,6 @@ export default function AdminUserPage() {
         </Space>
       </div>
 
-      {/* Summary Cards */}
       <Space size="middle" style={{ marginBottom: 20, display: 'flex' }}>
         <Card size="small" style={{ borderRadius: 10, minWidth: 160 }}>
           <Space>
@@ -225,7 +238,7 @@ export default function AdminUserPage() {
         </Card>
       </Space>
 
-      <Card 
+      <Card
         style={{ borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.06)', border: 'none' }}
         bodyStyle={{ padding: '16px 24px' }}
       >
@@ -250,10 +263,10 @@ export default function AdminUserPage() {
           />
         </Space>
 
-        <Table 
-          columns={columns} 
-          dataSource={filteredUsers} 
-          rowKey="id" 
+        <Table
+          columns={columns}
+          dataSource={filteredUsers}
+          rowKey="ma_user"
           loading={loading}
         />
       </Card>
@@ -272,30 +285,40 @@ export default function AdminUserPage() {
         cancelText="Hủy"
       >
         <Form form={form} layout="vertical" onFinish={handleSave}>
-          <Form.Item name="fullName" label="Tên hiển thị" rules={[{ required: true, message: 'Vui lòng nhập tên' }]}>
-            <Input prefix={<UserOutlined />} placeholder="Nguyễn Văn A" />
-          </Form.Item>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <Form.Item name="ho" label="Họ" rules={[{ required: true, message: 'Nhập họ' }]}>
+              <Input placeholder="Nguyễn" />
+            </Form.Item>
+            <Form.Item name="ten" label="Tên" rules={[{ required: true, message: 'Nhập tên' }]}>
+              <Input placeholder="Văn A" />
+            </Form.Item>
+          </div>
           <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email', message: 'Email không hợp lệ' }]}>
             <Input prefix={<MailOutlined />} placeholder="email@example.com" disabled={!!editingId} />
           </Form.Item>
           {!editingId && (
-            <Form.Item name="password" label="Mật khẩu" rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}>
+            <Form.Item name="mat_khau" label="Mật khẩu" rules={[{ required: true, message: 'Nhập mật khẩu' }]}>
               <Input.Password placeholder="Nhập mật khẩu" />
             </Form.Item>
           )}
-          <Form.Item name="phone" label="Số điện thoại">
+          <Form.Item name="so_dien_thoai" label="Số điện thoại">
             <Input prefix={<PhoneOutlined />} placeholder="0912345678" />
           </Form.Item>
-          <Form.Item name="role" label="Vai trò" rules={[{ required: true }]}>
-            <Select>
-              <Select.Option value="customer">
-                <Space><UserOutlined /> Khách hàng</Space>
-              </Select.Option>
-              <Select.Option value="admin">
-                <Space><CrownOutlined /> Quản trị viên</Space>
-              </Select.Option>
-            </Select>
+          <Form.Item name="dia_chi" label="Địa chỉ">
+            <Input placeholder="123 Đường ABC, TP.HCM" />
           </Form.Item>
+          {editingId && (
+            <Form.Item name="ma_role" label="Vai trò" rules={[{ required: true }]}>
+              <Select>
+                <Select.Option value={1}>
+                  <Space><CrownOutlined /> Quản trị viên</Space>
+                </Select.Option>
+                <Select.Option value={2}>
+                  <Space><UserOutlined /> Khách hàng</Space>
+                </Select.Option>
+              </Select>
+            </Form.Item>
+          )}
         </Form>
       </Modal>
     </div>

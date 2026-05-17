@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
-import { 
-  Table, Button, Space, Modal, Form, Input, InputNumber, Switch, 
-  message, Popconfirm, Tag, Select, Card, Typography, Image, 
-  Tooltip, Badge, Upload
+import {
+  Table, Button, Space, Modal, Form, Input, InputNumber, Switch,
+  message, Popconfirm, Tag, Select, Card, Typography, Image,
+  Tooltip, Badge
 } from 'antd'
-import { 
+import {
   EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined,
   ShoppingOutlined, ReloadOutlined, PictureOutlined,
-  StarFilled, InboxOutlined
+  StarFilled
 } from '@ant-design/icons'
-import { getProducts, createProduct, updateProduct, deleteProduct, getCategories } from '../../services/api'
+import { getAdminProducts, createProduct, updateProduct, deleteProduct, getCategories } from '../../services/api'
 
 const { Title, Text } = Typography
 const { TextArea } = Input
@@ -29,10 +29,10 @@ export default function AdminProductPage() {
     setLoading(true)
     try {
       const [prodData, catData] = await Promise.all([
-        getProducts(),
+        getAdminProducts(),
         getCategories()
       ])
-      const prods = prodData?.data || prodData || []
+      const prods = prodData || []
       setProducts(prods)
       setFilteredProducts(prods)
       setCategories(catData || [])
@@ -51,13 +51,13 @@ export default function AdminProductPage() {
     if (searchText) {
       const lower = searchText.toLowerCase()
       result = result.filter(p =>
-        p.name?.toLowerCase().includes(lower) ||
-        p.sku?.toLowerCase().includes(lower) ||
-        p.brand?.toLowerCase().includes(lower)
+        (p.ten_sp || '').toLowerCase().includes(lower) ||
+        (p.sku || '').toLowerCase().includes(lower) ||
+        (p.brand || '').toLowerCase().includes(lower)
       )
     }
     if (categoryFilter !== 'all') {
-      result = result.filter(p => p.categoryId === categoryFilter)
+      result = result.filter(p => p.ma_loai == categoryFilter)
     }
     setFilteredProducts(result)
   }, [searchText, categoryFilter, products])
@@ -65,15 +65,26 @@ export default function AdminProductPage() {
   const handleAdd = () => {
     setEditingId(null)
     form.resetFields()
-    form.setFieldsValue({ stock: 0, price: 0, featured: false })
+    form.setFieldsValue({ so_luong_ton: 0, don_gia: 0, featured: false, trang_thai: true })
     setIsModalOpen(true)
   }
 
   const handleEdit = (record) => {
-    setEditingId(record.id)
+    setEditingId(record.ma_sp)
     form.setFieldsValue({
-      ...record,
-      imageUrl: record.images?.[0] || '',
+      ten_sp: record.ten_sp,
+      slug: record.slug,
+      sku: record.sku,
+      brand: record.brand,
+      ma_loai: record.ma_loai,
+      don_gia: record.don_gia,
+      gia_goc: record.gia_goc,
+      so_luong_ton: record.so_luong_ton,
+      mo_ta_ngan: record.mo_ta_ngan,
+      mo_ta_chi_tiet: record.mo_ta_chi_tiet,
+      hinh_anh: record.hinh_anh,
+      featured: !!record.featured,
+      trang_thai: record.trang_thai === 1,
     })
     setIsModalOpen(true)
   }
@@ -90,30 +101,17 @@ export default function AdminProductPage() {
 
   const handleSave = async (values) => {
     try {
-      const { imageUrl, ...rest } = values
-      const payload = {
-        ...rest,
-        images: imageUrl ? [imageUrl] : [],
-      }
-
       if (editingId) {
-        await updateProduct(editingId, payload)
+        await updateProduct(editingId, values)
         message.success('Đã cập nhật sản phẩm')
       } else {
-        const newProduct = {
-          ...payload,
-          id: `prod-${Date.now()}`,
-          createdAt: new Date().toISOString(),
-          rating: 0,
-          reviewCount: 0,
-        }
-        await createProduct(newProduct)
+        await createProduct(values)
         message.success('Đã thêm sản phẩm mới')
       }
       setIsModalOpen(false)
       loadData()
     } catch (err) {
-      message.error('Lỗi khi lưu sản phẩm')
+      message.error(err.message || 'Lỗi khi lưu sản phẩm')
     }
   }
 
@@ -123,14 +121,14 @@ export default function AdminProductPage() {
       key: 'image',
       width: 80,
       render: (_, record) => (
-        record.images?.[0] ? (
+        record.hinh_anh ? (
           <Image
-            src={record.images[0]}
-            alt={record.name}
+            src={record.hinh_anh}
+            alt={record.ten_sp}
             width={50}
             height={50}
             style={{ objectFit: 'cover', borderRadius: 8 }}
-            fallback="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMIAAADDCAYAAADQvc6UAAABRWlDQ1BJQ0MgUHJvZmlsZQAAKJFjYGASSSwoyGFhYGDIzSspCnJ3UoiIjFJgf8LAwSDCIMogwMCcmFxc4BgQ4ANUwgCjUcG3awyMIPqyLsis7PPOzaFzfkNJwr4m"
+            fallback="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMIAAADDCAYAAADQvc6UAAABRWlDQ1BJQ0MgUHJvZmlsZQAAKJFjYGASSSwoyGFhYGDIzSspCnJ3UoiIjFJgf8LAwSDCIMogwMCcmFxc4BgQ4ANUwgCjUcG3awyMIPqyLsis7PPOzaFzfkNJwr4j"
           />
         ) : (
           <div style={{
@@ -148,14 +146,13 @@ export default function AdminProductPage() {
         )
       ),
     },
-    { 
-      title: 'Tên sản phẩm', 
-      dataIndex: 'name', 
-      key: 'name',
-      render: (name, record) => (
+    {
+      title: 'Tên sản phẩm',
+      key: 'ten_sp',
+      render: (_, record) => (
         <div>
-          <Text strong>{name}</Text>
-          {record.featured && (
+          <Text strong>{record.ten_sp}</Text>
+          {record.featured == 1 && (
             <Tag color="gold" style={{ marginLeft: 8 }}>
               <StarFilled /> Nổi bật
             </Tag>
@@ -165,61 +162,60 @@ export default function AdminProductPage() {
         </div>
       ),
     },
-    { 
-      title: 'SKU', 
-      dataIndex: 'sku', 
+    {
+      title: 'SKU',
+      dataIndex: 'sku',
       key: 'sku',
       width: 140,
       render: (sku) => <Text code>{sku}</Text>
     },
-    { 
-      title: 'Thương hiệu', 
-      dataIndex: 'brand', 
+    {
+      title: 'Thương hiệu',
+      dataIndex: 'brand',
       key: 'brand',
       width: 120,
       render: (brand) => brand ? <Tag color="blue">{brand}</Tag> : '-'
     },
     {
       title: 'Danh mục',
-      dataIndex: 'categoryId',
-      key: 'category',
+      key: 'danh_muc',
       width: 140,
-      render: (catId) => {
-        const cat = categories.find(c => c.id === catId)
-        return cat ? <Tag color="cyan">{cat.name}</Tag> : '-'
+      render: (_, record) => {
+        const cat = categories.find(c => c.ma_loai === record.ma_loai)
+        return cat ? <Tag color="cyan">{cat.ten_loai}</Tag> : '-'
       },
     },
-    { 
-      title: 'Giá', 
-      dataIndex: 'price', 
-      key: 'price',
+    {
+      title: 'Giá',
+      dataIndex: 'don_gia',
+      key: 'don_gia',
       width: 140,
-      sorter: (a, b) => a.price - b.price,
+      sorter: (a, b) => (a.don_gia || 0) - (b.don_gia || 0),
       render: (val, record) => (
         <div>
           <Text strong style={{ color: '#cf1322' }}>
-            {new Intl.NumberFormat('vi-VN').format(val)}₫
+            {new Intl.NumberFormat('vi-VN').format(val || 0)}₫
           </Text>
-          {record.compareAtPrice && record.compareAtPrice > val && (
+          {record.gia_goc && record.gia_goc > val && (
             <>
               <br />
               <Text delete type="secondary" style={{ fontSize: 12 }}>
-                {new Intl.NumberFormat('vi-VN').format(record.compareAtPrice)}₫
+                {new Intl.NumberFormat('vi-VN').format(record.gia_goc)}₫
               </Text>
             </>
           )}
         </div>
       ),
     },
-    { 
-      title: 'Tồn kho', 
-      dataIndex: 'stock', 
-      key: 'stock',
+    {
+      title: 'Tồn kho',
+      dataIndex: 'so_luong_ton',
+      key: 'so_luong_ton',
       width: 100,
-      sorter: (a, b) => a.stock - b.stock,
+      sorter: (a, b) => (a.so_luong_ton || 0) - (b.so_luong_ton || 0),
       render: (stock) => (
-        <Badge 
-          status={stock > 10 ? 'success' : stock > 0 ? 'warning' : 'error'} 
+        <Badge
+          status={stock > 10 ? 'success' : stock > 0 ? 'warning' : 'error'}
           text={
             <Text type={stock === 0 ? 'danger' : undefined}>
               {stock} {stock === 0 ? '(Hết hàng)' : ''}
@@ -237,7 +233,7 @@ export default function AdminProductPage() {
           <Tooltip title="Sửa">
             <Button type="text" icon={<EditOutlined />} onClick={() => handleEdit(record)} />
           </Tooltip>
-          <Popconfirm title="Chắc chắn xóa sản phẩm này?" onConfirm={() => handleDelete(record.id)}>
+          <Popconfirm title="Chắc chắn xóa sản phẩm này?" onConfirm={() => handleDelete(record.ma_sp)}>
             <Tooltip title="Xóa">
               <Button type="text" danger icon={<DeleteOutlined />} />
             </Tooltip>
@@ -261,7 +257,7 @@ export default function AdminProductPage() {
         </Space>
       </div>
 
-      <Card 
+      <Card
         style={{ borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.06)', border: 'none' }}
         bodyStyle={{ padding: '16px 24px' }}
       >
@@ -280,17 +276,23 @@ export default function AdminProductPage() {
             style={{ width: 180 }}
             options={[
               { label: 'Tất cả danh mục', value: 'all' },
-              ...categories.map(c => ({ label: c.name, value: c.id }))
+              ...categories.map(c => ({ label: c.ten_loai, value: c.ma_loai }))
             ]}
           />
         </Space>
 
-        <Table 
-          columns={columns} 
-          dataSource={filteredProducts} 
-          rowKey="id" 
+        <Table
+          columns={columns}
+          dataSource={filteredProducts}
+          rowKey="ma_sp"
           loading={loading}
           scroll={{ x: 1200 }}
+          pagination={{
+            pageSize: 10,
+            showSizeChanger: true,
+            pageSizeOptions: ['10', '20', '50'],
+            showTotal: (total, range) => `${range[0]}-${range[1]} trên ${total} sản phẩm`,
+          }}
         />
       </Card>
 
@@ -309,10 +311,10 @@ export default function AdminProductPage() {
         cancelText="Hủy"
       >
         <Form form={form} layout="vertical" onFinish={handleSave}>
-          <Form.Item name="name" label="Tên sản phẩm" rules={[{ required: true, message: 'Vui lòng nhập tên' }]}>
+          <Form.Item name="ten_sp" label="Tên sản phẩm" rules={[{ required: true, message: 'Vui lòng nhập tên' }]}>
             <Input placeholder="VD: Nồi cơm điện Sharp 1.8L" />
           </Form.Item>
-          
+
           <Space style={{ display: 'flex' }} size="middle">
             <Form.Item name="slug" label="Slug" rules={[{ required: true, message: 'Vui lòng nhập slug' }]} style={{ flex: 1 }}>
               <Input placeholder="noi-com-dien-sharp-1-8l" />
@@ -326,36 +328,36 @@ export default function AdminProductPage() {
             <Form.Item name="brand" label="Thương hiệu" style={{ flex: 1 }}>
               <Input placeholder="Sharp" />
             </Form.Item>
-            <Form.Item name="categoryId" label="Danh mục" style={{ flex: 1 }}>
+            <Form.Item name="ma_loai" label="Danh mục" style={{ flex: 1 }}>
               <Select
                 placeholder="Chọn danh mục"
-                options={categories.map(c => ({ label: c.name, value: c.id }))}
+                options={categories.map(c => ({ label: c.ten_loai, value: c.ma_loai }))}
                 allowClear
               />
             </Form.Item>
           </Space>
 
           <Space style={{ display: 'flex' }} size="middle">
-            <Form.Item name="price" label="Giá bán" rules={[{ required: true, message: 'Vui lòng nhập giá' }]} style={{ flex: 1 }}>
+            <Form.Item name="don_gia" label="Giá bán" rules={[{ required: true, message: 'Vui lòng nhập giá' }]} style={{ flex: 1 }}>
               <InputNumber style={{ width: '100%' }} min={0} formatter={v => `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} placeholder="1,690,000" />
             </Form.Item>
-            <Form.Item name="compareAtPrice" label="Giá gốc (so sánh)" style={{ flex: 1 }}>
+            <Form.Item name="gia_goc" label="Giá gốc" style={{ flex: 1 }}>
               <InputNumber style={{ width: '100%' }} min={0} formatter={v => `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} placeholder="2,000,000" />
             </Form.Item>
-            <Form.Item name="stock" label="Tồn kho" style={{ flex: 1 }}>
+            <Form.Item name="so_luong_ton" label="Tồn kho" style={{ flex: 1 }}>
               <InputNumber style={{ width: '100%' }} min={0} />
             </Form.Item>
           </Space>
 
-          <Form.Item name="imageUrl" label="URL hình ảnh">
+          <Form.Item name="hinh_anh" label="URL hình ảnh">
             <Input placeholder="https://example.com/image.jpg" prefix={<PictureOutlined />} />
           </Form.Item>
 
-          <Form.Item name="shortDescription" label="Mô tả ngắn">
+          <Form.Item name="mo_ta_ngan" label="Mô tả ngắn">
             <TextArea rows={2} placeholder="Mô tả ngắn về sản phẩm..." />
           </Form.Item>
 
-          <Form.Item name="description" label="Mô tả chi tiết">
+          <Form.Item name="mo_ta_chi_tiet" label="Mô tả chi tiết">
             <TextArea rows={4} placeholder="Mô tả chi tiết sản phẩm..." />
           </Form.Item>
 

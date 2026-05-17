@@ -96,7 +96,7 @@ function AppShell() {
 
             {isAuthenticated ? (
               <>
-                <NavLink to="/tai-khoan">Chào, {user?.fullName || user?.username}</NavLink>
+                <NavLink to="/tai-khoan">Chào, {user ? (user.ho + ' ' + user.ten).trim() : ''}</NavLink>
                 <a href="#" onClick={handleLogout} style={{ color: '#d70018' }}>Đăng xuất</a>
               </>
             ) : (

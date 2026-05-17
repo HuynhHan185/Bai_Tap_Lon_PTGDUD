@@ -1,9 +1,18 @@
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/db');
 const asyncHandler = require('../utils/asyncHandler');
 const ApiError = require('../utils/ApiError');
 const { generateOrderCode } = require('../utils/helpers');
+
+// Helper: thêm fullName và role vào user object
+function normalizeUser(user) {
+  if (!user) return null;
+  return {
+    ...user,
+    fullName: [user.ho, user.ten].filter(Boolean).join(' ').trim(),
+    role: user.ten_role || (user.ma_role === 1 ? 'admin' : user.ma_role === 2 ? 'customer' : 'user'),
+  };
+}
 
 // POST /api/auth/register
 const register = asyncHandler(async (req, res) => {
@@ -14,16 +23,14 @@ const register = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Email đã được sử dụng');
   }
 
-  const hashedPassword = await bcrypt.hash(mat_khau, 10);
-
   const [result] = await pool.query(
     `INSERT INTO users (ho, ten, email, mat_khau, so_dien_thoai, dia_chi, gioi_tinh, ngay_sinh, ma_role)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 2)`,
-    [ho, ten, email, hashedPassword, so_dien_thoai || null, dia_chi || null, gioi_tinh || null, ngay_sinh || null]
+    [ho, ten, email, mat_khau, so_dien_thoai || null, dia_chi || null, gioi_tinh || null, ngay_sinh || null]
   );
 
   const [users] = await pool.query('SELECT * FROM users WHERE ma_user = ?', [result.insertId]);
-  const user = users[0];
+  const user = normalizeUser(users[0]);
   delete user.mat_khau;
 
   const token = jwt.sign(
@@ -46,7 +53,7 @@ const login = asyncHandler(async (req, res) => {
     throw new ApiError(401, 'Email hoặc mật khẩu không đúng');
   }
 
-  const isMatch = await bcrypt.compare(mat_khau, user.mat_khau);
+  const isMatch = mat_khau === user.mat_khau;
   if (!isMatch) {
     throw new ApiError(401, 'Email hoặc mật khẩu không đúng');
   }
@@ -64,9 +71,10 @@ const login = asyncHandler(async (req, res) => {
     { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
   );
 
-  delete user.mat_khau;
+  const normalized = normalizeUser(user);
+  delete normalized.mat_khau;
 
-  res.json({ success: true, accessToken: token, user });
+  res.json({ success: true, accessToken: token, user: normalized });
 });
 
 // GET /api/auth/me
@@ -80,7 +88,7 @@ const getMe = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Không tìm thấy người dùng');
   }
 
-  const user = users[0];
+  const user = normalizeUser(users[0]);
   delete user.mat_khau;
 
   res.json({ success: true, user });
@@ -136,8 +144,7 @@ const resetPassword = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Token không hợp lệ');
   }
 
-  const hashedPassword = await bcrypt.hash(mat_khau_moi, 10);
-  await pool.query('UPDATE users SET mat_khau = ? WHERE ma_user = ?', [hashedPassword, decoded.ma_user]);
+  await pool.query('UPDATE users SET mat_khau = ? WHERE ma_user = ?', [mat_khau_moi, decoded.ma_user]);
 
   res.json({ success: true, message: 'Đặt lại mật khẩu thành công' });
 });
@@ -153,11 +160,65 @@ const getAllUsers = asyncHandler(async (req, res) => {
   );
 
   const sanitized = users.map(u => {
-    const { ...rest } = u;
-    return rest;
+    const normalized = normalizeUser(u);
+    delete normalized.mat_khau;
+    return normalized;
   });
 
   res.json({ success: true, users: sanitized });
+});
+
+// PATCH /api/users/:id - Admin update user
+const updateUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { ho, ten, so_dien_thoai, dia_chi, gioi_tinh, ngay_sinh, trang_thai, ma_role, mat_khau_moi } = req.body;
+
+  const [existing] = await pool.query('SELECT * FROM users WHERE ma_user = ?', [id]);
+  if (existing.length === 0) throw new ApiError(404, 'Không tìm thấy người dùng');
+
+  const updates = [];
+  const values = [];
+
+  if (ho !== undefined) { updates.push('ho = ?'); values.push(ho); }
+  if (ten !== undefined) { updates.push('ten = ?'); values.push(ten); }
+  if (so_dien_thoai !== undefined) { updates.push('so_dien_thoai = ?'); values.push(so_dien_thoai); }
+  if (dia_chi !== undefined) { updates.push('dia_chi = ?'); values.push(dia_chi); }
+  if (gioi_tinh !== undefined) { updates.push('gioi_tinh = ?'); values.push(gioi_tinh); }
+  if (ngay_sinh !== undefined) { updates.push('ngay_sinh = ?'); values.push(ngay_sinh); }
+  if (trang_thai !== undefined) { updates.push('trang_thai = ?'); values.push(trang_thai); }
+  if (ma_role !== undefined) { updates.push('ma_role = ?'); values.push(ma_role); }
+  if (mat_khau_moi) { updates.push('mat_khau = ?'); values.push(mat_khau_moi); }
+
+  if (updates.length === 0) {
+    throw new ApiError(400, 'Không có trường nào để cập nhật');
+  }
+
+  values.push(id);
+  await pool.query(`UPDATE users SET ${updates.join(', ')} WHERE ma_user = ?`, values);
+
+  const [updated] = await pool.query(
+    `SELECT u.*, r.ten_role FROM users u JOIN roles r ON u.ma_role = r.ma_role WHERE u.ma_user = ?`,
+    [id]
+  );
+  const user = normalizeUser(updated[0]);
+  delete user.mat_khau;
+
+  res.json({ success: true, message: 'Cập nhật thành công', user });
+});
+
+// DELETE /api/users/:id - Admin soft delete user
+const deleteUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const [existing] = await pool.query('SELECT * FROM users WHERE ma_user = ?', [id]);
+  if (existing.length === 0) throw new ApiError(404, 'Không tìm thấy người dùng');
+
+  if (existing[0].ma_role === 1) {
+    throw new ApiError(400, 'Không thể xóa tài khoản quản trị viên');
+  }
+
+  await pool.query('UPDATE users SET is_deleted = 1 WHERE ma_user = ?', [id]);
+  res.json({ success: true, message: 'Xóa người dùng thành công' });
 });
 
 module.exports = {
@@ -167,4 +228,6 @@ module.exports = {
   forgotPassword,
   resetPassword,
   getAllUsers,
+  updateUser,
+  deleteUser,
 };

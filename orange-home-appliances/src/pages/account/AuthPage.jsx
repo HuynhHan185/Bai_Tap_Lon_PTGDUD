@@ -48,10 +48,14 @@ function AuthPage({ mode = 'login' }) {
       if (isLogin) {
         data = await login(values.email, values.password)
       } else if (isRegister) {
+        const nameParts = values.fullName.trim().split(/\s+/)
+        const ho = nameParts.slice(0, -1).join(' ') || values.fullName
+        const ten = nameParts[nameParts.length - 1] || ''
         data = await register({
+          ho,
+          ten,
           email: values.email,
-          password: values.password,
-          fullName: values.fullName
+          mat_khau: values.password,
         })
       }
       

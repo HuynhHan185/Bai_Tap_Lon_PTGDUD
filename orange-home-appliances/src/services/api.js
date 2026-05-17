@@ -304,6 +304,17 @@ export async function getAdminUsers() {
   return data.users
 }
 
+export async function updateUser(id, payload) {
+  return fetchApi(`/users/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function deleteUser(id) {
+  return fetchApi(`/users/${id}`, { method: 'DELETE' })
+}
+
 // Admin: Contacts
 export async function getAdminContacts(params = {}) {
   const sp = new URLSearchParams(params)

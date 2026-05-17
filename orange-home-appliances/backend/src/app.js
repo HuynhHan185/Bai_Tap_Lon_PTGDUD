@@ -40,6 +40,9 @@ app.use('/api', (req, res, next) => {
 
 // Static files (uploaded images)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/Noichien', express.static(path.join(__dirname, '../../public/Noichien')));
+app.use('/Noicom', express.static(path.join(__dirname, '../../public/Noicom')));
+app.use('/Quat', express.static(path.join(__dirname, '../../public/Quat')));
 
 // API routes
 app.use('/api', routes);

@@ -1,0 +1,1 @@
+function e(e){return new Intl.NumberFormat(`vi-VN`).format(e)+`₫`}export{e as t};

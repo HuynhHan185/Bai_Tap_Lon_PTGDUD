@@ -42,13 +42,16 @@ function CheckoutPage() {
   })
 
   async function onSubmit(values) {
+    const cartItems = items.map(item => ({
+      ma_sp: item.id,
+      so_luong: item.quantity,
+    }))
     await createOrder({
-      ...values,
-      userId: user?.id,
-      items,
-      subtotal,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
+      ho_ten: values.fullName,
+      so_dien_thoai: values.phone,
+      dia_chi: values.address,
+      phuong_thuc_thanh_toan: values.paymentMethod,
+      items: cartItems,
     })
 
     dispatch(clearCart())

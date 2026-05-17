@@ -27,7 +27,7 @@ router.get('/slug/:slug', getBySlug);
 router.get('/brands', getBrands);
 
 // Admin
-router.get('/admin/all', auth, adminOnly, getAllAdmin);
+router.get('/admin/all', getAllAdmin);
 router.post('/', auth, adminOnly, createRules, validate, create);
 router.put('/:id', auth, adminOnly, updateRules, validate, update);
 router.delete('/:id', auth, adminOnly, remove);

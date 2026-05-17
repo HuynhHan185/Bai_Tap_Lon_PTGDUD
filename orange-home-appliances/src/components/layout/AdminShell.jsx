@@ -55,7 +55,7 @@ export default function AdminShell() {
         key: 'info',
         label: (
           <div style={{ padding: '4px 0' }}>
-            <Text strong>{user?.fullName || user?.username}</Text>
+            <Text strong>{user ? (user.ho + ' ' + user.ten).trim() : ''}</Text>
             <br />
             <Text type="secondary" style={{ fontSize: 12 }}>{user?.email}</Text>
           </div>
@@ -216,7 +216,7 @@ export default function AdminShell() {
                   style={{ backgroundColor: '#fa8c16' }}
                   icon={<CrownOutlined />}
                 />
-                <Text strong>{user?.fullName || user?.username}</Text>
+                <Text strong>{user ? (user.ho + ' ' + user.ten).trim() : ''}</Text>
               </Space>
             </Dropdown>
           </Space>

@@ -22,14 +22,13 @@ export default function AdminCategoryPage() {
         apiFetch('/categories'),
         getProducts()
       ])
-      const cats = catData || []
+      const cats = catData?.categories || catData || []
       const prods = prodData?.data || prodData || []
-      
-      // Count products per category
+
       const counts = {}
       prods.forEach(p => {
-        if (p.categoryId) {
-          counts[p.categoryId] = (counts[p.categoryId] || 0) + 1
+        if (p.ma_loai) {
+          counts[p.ma_loai] = (counts[p.ma_loai] || 0) + 1
         }
       })
       setProductCounts(counts)
@@ -50,8 +49,8 @@ export default function AdminCategoryPage() {
       const lower = searchText.toLowerCase()
       setFilteredCategories(
         categories.filter(c =>
-          c.name?.toLowerCase().includes(lower) ||
-          c.slug?.toLowerCase().includes(lower)
+          (c.ten_loai || '').toLowerCase().includes(lower) ||
+          (c.slug || '').toLowerCase().includes(lower)
         )
       )
     } else {
@@ -66,13 +65,17 @@ export default function AdminCategoryPage() {
   }
 
   const handleEdit = (record) => {
-    setEditingId(record.id)
-    form.setFieldsValue(record)
+    setEditingId(record.ma_loai)
+    form.setFieldsValue({
+      ten_loai: record.ten_loai,
+      slug: record.slug,
+      mo_ta: record.mo_ta,
+    })
     setIsModalOpen(true)
   }
 
   const handleDelete = async (id) => {
-    if (productCounts[id] > 0) {
+    if ((productCounts[id] || 0) > 0) {
       message.warning(`Danh mục này đang có ${productCounts[id]} sản phẩm. Vui lòng chuyển sản phẩm trước khi xóa.`)
       return
     }
@@ -81,43 +84,26 @@ export default function AdminCategoryPage() {
       message.success('Đã xóa danh mục')
       loadData()
     } catch (err) {
-      message.error('Lỗi xóa danh mục')
+      message.error(err.message || 'Lỗi xóa danh mục')
     }
   }
 
   const handleSave = async (values) => {
     try {
-      // Auto-generate slug from name if not provided
-      if (!values.slug && values.name) {
-        values.slug = values.name
-          .toLowerCase()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .replace(/đ/g, 'd')
-          .replace(/Đ/g, 'D')
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/(^-|-$)/g, '')
-      }
-
       if (editingId) {
         await updateCategory(editingId, values)
         message.success('Cập nhật thành công')
       } else {
-        const newCat = {
-          ...values,
-          id: `cat-${Date.now()}`
-        }
-        await createCategory(newCat)
+        await createCategory(values)
         message.success('Thêm thành công')
       }
       setIsModalOpen(false)
       loadData()
     } catch (err) {
-      message.error('Lỗi lưu danh mục')
+      message.error(err.message || 'Lỗi lưu danh mục')
     }
   }
 
-  // Auto-generate slug when name changes (only for new categories)
   const handleNameChange = (e) => {
     if (!editingId) {
       const name = e.target.value
@@ -156,15 +142,15 @@ export default function AdminCategoryPage() {
     },
     {
       title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-      width: 120,
+      dataIndex: 'ma_loai',
+      key: 'ma_loai',
+      width: 80,
       render: (id) => <Text code style={{ fontSize: 12 }}>{id}</Text>
     },
-    { 
-      title: 'Tên danh mục', 
-      dataIndex: 'name', 
-      key: 'name',
+    {
+      title: 'Tên danh mục',
+      dataIndex: 'ten_loai',
+      key: 'ten_loai',
       render: (name) => (
         <Space>
           <TagOutlined style={{ color: '#fa8c16' }} />
@@ -172,9 +158,9 @@ export default function AdminCategoryPage() {
         </Space>
       ),
     },
-    { 
-      title: 'Slug', 
-      dataIndex: 'slug', 
+    {
+      title: 'Slug',
+      dataIndex: 'slug',
       key: 'slug',
       render: (slug) => <Tag color="geekblue">{slug}</Tag>
     },
@@ -183,7 +169,7 @@ export default function AdminCategoryPage() {
       key: 'productCount',
       width: 130,
       render: (_, record) => {
-        const count = productCounts[record.id] || 0
+        const count = productCounts[record.ma_loai] || 0
         return (
           <Badge
             count={count}
@@ -203,14 +189,14 @@ export default function AdminCategoryPage() {
           <Tooltip title="Sửa">
             <Button type="text" icon={<EditOutlined />} onClick={() => handleEdit(record)} />
           </Tooltip>
-          <Popconfirm 
-            title="Xóa danh mục này?" 
+          <Popconfirm
+            title="Xóa danh mục này?"
             description={
-              productCounts[record.id] > 0 
-                ? `Danh mục này có ${productCounts[record.id]} sản phẩm.`
+              (productCounts[record.ma_loai] || 0) > 0
+                ? `Danh mục này có ${productCounts[record.ma_loai]} sản phẩm.`
                 : undefined
             }
-            onConfirm={() => handleDelete(record.id)}
+            onConfirm={() => handleDelete(record.ma_loai)}
           >
             <Tooltip title="Xóa">
               <Button type="text" danger icon={<DeleteOutlined />} />
@@ -235,7 +221,7 @@ export default function AdminCategoryPage() {
         </Space>
       </div>
 
-      <Card 
+      <Card
         style={{ borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.06)', border: 'none' }}
         bodyStyle={{ padding: '16px 24px' }}
       >
@@ -250,7 +236,7 @@ export default function AdminCategoryPage() {
           />
         </Space>
 
-        <Table columns={columns} dataSource={filteredCategories} rowKey="id" loading={loading} />
+        <Table columns={columns} dataSource={filteredCategories} rowKey="ma_loai" loading={loading} />
       </Card>
 
       <Modal
@@ -267,16 +253,19 @@ export default function AdminCategoryPage() {
         cancelText="Hủy"
       >
         <Form form={form} layout="vertical" onFinish={handleSave}>
-          <Form.Item name="name" label="Tên danh mục" rules={[{ required: true, message: 'Vui lòng nhập tên danh mục' }]}>
+          <Form.Item name="ten_loai" label="Tên danh mục" rules={[{ required: true, message: 'Vui lòng nhập tên danh mục' }]}>
             <Input placeholder="VD: Nồi cơm điện" onChange={handleNameChange} />
           </Form.Item>
-          <Form.Item 
-            name="slug" 
-            label="Slug (đường dẫn)" 
+          <Form.Item
+            name="slug"
+            label="Slug (đường dẫn)"
             rules={[{ required: true, message: 'Vui lòng nhập slug' }]}
             extra="Slug sẽ tự động tạo từ tên danh mục"
           >
             <Input placeholder="noi-com-dien" />
+          </Form.Item>
+          <Form.Item name="mo_ta" label="Mô tả">
+            <Input.TextArea placeholder="Mô tả ngắn về danh mục" rows={2} />
           </Form.Item>
         </Form>
       </Modal>

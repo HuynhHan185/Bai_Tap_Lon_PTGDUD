@@ -16,7 +16,7 @@ import {
   BarChartOutlined
 } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
-import { getProducts, getAllOrders, getAllUsers, getCategories } from '../../services/api'
+import { getProducts, getAllOrders, getAdminUsers, getCategories } from '../../services/api'
 import dayjs from 'dayjs'
 
 const { Title, Text } = Typography
@@ -57,24 +57,24 @@ export default function AdminDashboardPage() {
         const [products, orders, users, categories] = await Promise.all([
           getProducts(),
           getAllOrders(),
-          getAllUsers(),
+          getAdminUsers(),
           getCategories(),
         ])
 
-        const productList = products?.data || products || []
-        const orderList = orders || []
+        const productList = products?.products || []
+        const orderList = orders?.orders || orders || []
         const userList = users || []
         const categoryList = categories || []
 
         const totalRevenue = orderList.reduce((sum, order) => sum + Number(order.subtotal || 0), 0)
         const completedRevenue = orderList
-          .filter(o => o.status === 'completed')
-          .reduce((sum, order) => sum + Number(order.subtotal || 0), 0)
+          .filter(o => o.trang_thai === 'completed')
+          .reduce((sum, order) => sum + Number(order.thanh_tien || 0), 0)
 
-        const pending = orderList.filter(o => o.status === 'pending').length
-        const completed = orderList.filter(o => o.status === 'completed').length
-        const cancelled = orderList.filter(o => o.status === 'cancelled').length
-        const shipping = orderList.filter(o => o.status === 'shipping').length
+        const pending = orderList.filter(o => o.trang_thai === 'pending').length
+        const completed = orderList.filter(o => o.trang_thai === 'completed').length
+        const cancelled = orderList.filter(o => o.trang_thai === 'cancelled').length
+        const shipping = orderList.filter(o => o.trang_thai === 'shipping').length
 
         setStats({
           products: productList.length,
@@ -92,7 +92,7 @@ export default function AdminDashboardPage() {
         setOrdersByStatus({ pending, completed, cancelled, shipping })
 
         // Recent orders - top 5
-        const sorted = [...orderList].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        const sorted = [...orderList].sort((a, b) => new Date(b.ngay_tao) - new Date(a.ngay_tao))
         setRecentOrders(sorted.slice(0, 5))
 
         // Top products by frequency in orders
@@ -119,46 +119,46 @@ export default function AdminDashboardPage() {
   const recentOrderColumns = [
     {
       title: 'Mã ĐH',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: 'ma_don_hang',
+      key: 'ma_don_hang',
       render: (id) => <Text code style={{ fontSize: 12 }}>{id?.slice(0, 8)}...</Text>
     },
     {
       title: 'Khách hàng',
-      dataIndex: 'fullName',
-      key: 'fullName',
-      render: (name) => <Text strong>{name}</Text>
+      dataIndex: 'ho',
+      key: 'ho',
+      render: (_, record) => <Text strong>{[record.ho, record.ten].filter(Boolean).join(' ')}</Text>
     },
     {
       title: 'Ngày đặt',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
+      dataIndex: 'ngay_tao',
+      key: 'ngay_tao',
       render: (date) => (
-        <Tooltip title={dayjs(date).format('DD/MM/YYYY HH:mm:ss')}>
-          <Text type="secondary">{dayjs(date).format('DD/MM/YYYY')}</Text>
+        <Tooltip title={date ? new Date(date).toLocaleString('vi-VN') : ''}>
+          <Text type="secondary">{date ? new Date(date).toLocaleDateString('vi-VN') : ''}</Text>
         </Tooltip>
       ),
     },
     {
       title: 'Tổng tiền',
-      dataIndex: 'subtotal',
-      key: 'subtotal',
+      dataIndex: 'thanh_tien',
+      key: 'thanh_tien',
       render: (val) => (
         <Text strong style={{ color: '#cf1322' }}>
-          {new Intl.NumberFormat('vi-VN').format(val)}₫
+          {new Intl.NumberFormat('vi-VN').format(val || 0)}₫
         </Text>
       ),
     },
     {
       title: 'Thanh toán',
-      dataIndex: 'paymentMethod',
-      key: 'paymentMethod',
+      dataIndex: 'phuong_thuc_thanh_toan',
+      key: 'phuong_thuc_thanh_toan',
       render: (method) => <Tag>{paymentMethodMap[method] || method}</Tag>
     },
     {
       title: 'Trạng thái',
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'trang_thai',
+      key: 'trang_thai',
       render: (status) => {
         const s = statusMap[status] || { label: status, color: 'default' }
         return <Tag icon={s.icon} color={s.color}>{s.label}</Tag>
